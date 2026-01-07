@@ -125,6 +125,106 @@ export function activate(context: vscode.ExtensionContext) {
 
         await tempTableNode.showTableStructure();
     }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.openTable", async () => {
+        if (!Global.activeConnection || !Global.activeConnection.database) {
+            vscode.window.showWarningMessage("No MySQL database selected. Please select a database first.");
+            return;
+        }
+
+        const connectionOptions = {
+            host: Global.activeConnection.host,
+            user: Global.activeConnection.user,
+            password: Global.activeConnection.password,
+            port: Global.activeConnection.port,
+            database: Global.activeConnection.database,
+            certPath: Global.activeConnection.certPath,
+        };
+
+        try {
+            // Get all tables with comments from current database
+            const connection = Utility.createConnection(connectionOptions);
+            const tables = await Utility.queryPromise<any[]>(connection,
+                `SELECT TABLE_NAME, TABLE_COMMENT
+                 FROM information_schema.TABLES
+                 WHERE TABLE_SCHEMA = '${Global.activeConnection.database}'
+                 ORDER BY TABLE_NAME;`);
+
+            if (!tables || tables.length === 0) {
+                vscode.window.showInformationMessage("No tables found in current database.");
+                return;
+            }
+
+            // Create QuickPick items with table name and comment
+            interface TableQuickPickItem extends vscode.QuickPickItem {
+                tableName: string;
+            }
+
+            const items: TableQuickPickItem[] = tables.map((t: any) => {
+                const comment = t.TABLE_COMMENT || '';
+                const label = comment ? `${t.TABLE_NAME} - ${comment}` : t.TABLE_NAME;
+                return {
+                    label: label,
+                    description: '',
+                    tableName: t.TABLE_NAME
+                };
+            });
+
+            // Create and show QuickPick
+            const quickPick = vscode.window.createQuickPick();
+            quickPick.placeholder = 'Type to filter tables...';
+            quickPick.items = items.slice(0, 10); // Initially show first 10
+            quickPick.canSelectMany = false;
+
+            // Store all items for filtering
+            let allItems: TableQuickPickItem[] = items;
+
+            quickPick.onDidChangeValue(async (value: string) => {
+                if (!value) {
+                    quickPick.items = allItems.slice(0, 10);
+                    return;
+                }
+
+                // Filter tables by table name or comment (fuzzy search)
+                const filterValue = value.toLowerCase();
+                const filtered = allItems.filter((item) => {
+                    const tableName = item.tableName.toLowerCase();
+                    const label = item.label.toLowerCase();
+                    return tableName.includes(filterValue) || label.includes(filterValue);
+                });
+
+                quickPick.items = filtered;
+            });
+
+            quickPick.onDidAccept(async () => {
+                const selected = quickPick.selectedItems[0] as TableQuickPickItem;
+                quickPick.hide();
+
+                if (selected) {
+                    const tempTableNode = new TableNode(
+                        Global.activeConnection.host,
+                        Global.activeConnection.user,
+                        Global.activeConnection.password,
+                        Global.activeConnection.port,
+                        Global.activeConnection.database,
+                        selected.tableName,
+                        Global.activeConnection.certPath
+                    );
+
+                    await tempTableNode.showTableStructure();
+                }
+            });
+
+            quickPick.onDidHide(() => {
+                quickPick.dispose();
+            });
+
+            quickPick.show();
+
+        } catch (err) {
+            vscode.window.showErrorMessage(`Error: ${err}`);
+        }
+    }));
 }
 
 export function deactivate() {

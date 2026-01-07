@@ -97,6 +97,11 @@
                 "command": "mysql.viewTableStructureFromEditor",
                 "title": "View Table Structure",
                 "category": "MySQL"
+            },
+            {
+                "command": "mysql.openTable",
+                "title": "Open Table",
+                "category": "MySQL"
             }
         ],
         "keybindings": [
@@ -104,6 +109,13 @@
                 "command": "mysql.runQuery",
                 "key": "ctrl+alt+e",
                 "when": "editorLangId == sql"
+            },
+            {
+                "command": "mysql.openTable",
+                "key": "cmd+shift+t",
+                "mac": "cmd+shift+t",
+                "win": "ctrl+shift+t",
+                "linux": "ctrl+shift+t"
             }
         ],
         "menus": {
