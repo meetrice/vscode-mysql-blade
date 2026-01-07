@@ -58,4 +58,19 @@ export class DatabaseNode implements INode {
             certPath: this.certPath,
         };
     }
+
+    public async selectDatabase() {
+        AppInsightsClient.sendEvent("selectDatabase", { viewItem: "database" });
+
+        Global.activeConnection = {
+            host: this.host,
+            user: this.user,
+            password: this.password,
+            port: this.port,
+            database: this.database,
+            certPath: this.certPath,
+        };
+
+        vscode.window.showInformationMessage(`Database selected: ${this.database}`);
+    }
 }

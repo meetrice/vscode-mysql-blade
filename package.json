@@ -74,8 +74,28 @@
                 "category": "MySQL"
             },
             {
+                "command": "mysql.selectDatabase",
+                "title": "Select Database",
+                "category": "MySQL"
+            },
+            {
                 "command": "mysql.selectTop1000",
-                "title": "Select Top 1000",
+                "title": "Select Top 100",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.copyTableName",
+                "title": "Copy Name",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.showTableStructure",
+                "title": "View Table Structure",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.viewTableStructureFromEditor",
+                "title": "View Table Structure",
                 "category": "MySQL"
             }
         ],
@@ -90,8 +110,11 @@
             "editor/context": [
                 {
                     "command": "mysql.runQuery",
-                    "when": "editorLangId == sql",
-                    "group": "navigation"
+                    "group": "inline@1"
+                },
+                {
+                    "command": "mysql.viewTableStructureFromEditor",
+                    "group": "inline@2"
                 }
             ],
             "view/title": [
@@ -118,13 +141,28 @@
                     "group": "mysql@2"
                 },
                 {
-                    "command": "mysql.newQuery",
+                    "command": "mysql.selectDatabase",
                     "when": "view == mysql && viewItem == database",
                     "group": "mysql@0"
                 },
                 {
+                    "command": "mysql.newQuery",
+                    "when": "view == mysql && viewItem == database",
+                    "group": "mysql@1"
+                },
+                {
                     "command": "mysql.refresh",
                     "when": "view == mysql && viewItem == database",
+                    "group": "mysql@2"
+                },
+                {
+                    "command": "mysql.copyTableName",
+                    "when": "view == mysql && viewItem == table",
+                    "group": "mysql@1"
+                },
+                {
+                    "command": "mysql.showTableStructure",
+                    "when": "view == mysql && viewItem == table",
                     "group": "mysql@1"
                 },
                 {
@@ -135,7 +173,7 @@
                 {
                     "command": "mysql.refresh",
                     "when": "view == mysql && viewItem == table",
-                    "group": "mysql@1"
+                    "group": "mysql@2"
                 }
             ]
         },

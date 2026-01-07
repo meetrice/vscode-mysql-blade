@@ -53,7 +53,7 @@ export class Utility {
         return result;
     }
 
-    public static async runQuery(sql?: string, connectionOptions?: IConnection) {
+    public static async runQuery(sql?: string, connectionOptions?: IConnection, totalRows?: number) {
         AppInsightsClient.sendEvent("runQuery.start");
         if (!sql && !vscode.window.activeTextEditor) {
             vscode.window.showWarningMessage("No SQL file selected");
@@ -93,13 +93,144 @@ export class Utility {
                 if (rows.some(((row) => Array.isArray(row)))) {
                     rows.forEach((row, index) => {
                         if (Array.isArray(row)) {
-                             Utility.showQueryResult(row, "Results " + (index + 1));
+                             Utility.showQueryResult(row, "Results " + (index + 1), sql, totalRows);
                         } else {
                             OutputChannel.appendLine(JSON.stringify(row));
                         }
                     });
                 } else {
-                    Utility.showQueryResult(rows, "Results");
+                    Utility.showQueryResult(rows, "Results", sql, totalRows);
+                }
+
+            } else {
+                OutputChannel.appendLine(JSON.stringify(rows));
+            }
+
+            if (err) {
+                OutputChannel.appendLine(err);
+                AppInsightsClient.sendEvent("runQuery.end", { Result: "Fail", ErrorMessage: err });
+            } else {
+                AppInsightsClient.sendEvent("runQuery.end", { Result: "Success" });
+            }
+            OutputChannel.appendLine("[Done] Finished MySQL query.");
+        });
+        connection.end();
+    }
+
+    // Parse table name from SQL query
+    // The first word after FROM is treated as the table name (case-insensitive, ignoring quotes)
+    private static parseTableFromSQL(sql: string): { database?: string, table?: string } {
+        const trimmedSql = sql.trim();
+
+        // Find FROM keyword (case-insensitive)
+        const fromIndex = trimmedSql.toUpperCase().indexOf('FROM');
+        if (fromIndex === -1) {
+            return { database: undefined, table: undefined };
+        }
+
+        // Get everything after FROM
+        const afterFrom = trimmedSql.substring(fromIndex + 4).trim();
+
+        // Remove leading quotes (backticks, single quotes, double quotes)
+        let tableName = afterFrom.replace(/^[`'"`]*/, '');
+
+        // Find the end of the table name (stop at space, comma, semicolon, parenthesis, or quote)
+        const endMatch = tableName.match(/[\s,;)`'"`]/);
+        if (endMatch) {
+            tableName = tableName.substring(0, endMatch.index);
+        }
+
+        // Check if it contains a dot (database.table format)
+        const dotIndex = tableName.indexOf('.');
+        if (dotIndex !== -1) {
+            const database = tableName.substring(0, dotIndex);
+            const table = tableName.substring(dotIndex + 1);
+            return { database, table };
+        }
+
+        return { database: undefined, table: tableName };
+    }
+
+    public static async runQueryWithTotal(sql?: string, database?: string, table?: string, updatePanel: boolean = false) {
+        AppInsightsClient.sendEvent("runQuery.start");
+        if (!sql && !vscode.window.activeTextEditor) {
+            vscode.window.showWarningMessage("No SQL file selected");
+            AppInsightsClient.sendEvent("runQuery.noFile");
+            return;
+        }
+        if (!Global.activeConnection) {
+            const hasActiveConnection = await Utility.hasActiveConnection();
+            if (!hasActiveConnection) {
+                vscode.window.showWarningMessage("No MySQL Server or Database selected");
+                AppInsightsClient.sendEvent("runQuery.noMySQL");
+                return;
+            }
+        }
+
+        if (!sql) {
+            const activeTextEditor = vscode.window.activeTextEditor;
+            const selection = activeTextEditor.selection;
+            if (selection.isEmpty) {
+                sql = activeTextEditor.document.getText();
+            } else {
+                sql = activeTextEditor.document.getText(selection);
+            }
+        }
+
+        const connectionOptions = Global.activeConnection;
+        connectionOptions.multipleStatements = true;
+        const connection = Utility.createConnection(connectionOptions);
+
+        if (this.getConfiguration().get<boolean>("enableDelimiterOperator")) {
+            sql = this.removeDelimiterInstructions(sql);
+        }
+
+        // Auto add LIMIT 100 if SQL is SELECT and doesn't have LIMIT
+        const upperSql = sql.trim().toUpperCase();
+        if (upperSql.startsWith('SELECT') && !upperSql.includes('LIMIT')) {
+            sql = sql.trim() + ' LIMIT 100';
+        }
+
+        // Always try to parse table from SQL first
+        let parsedDatabase = database;
+        let parsedTable = table;
+        const parsed = Utility.parseTableFromSQL(sql);
+        if (parsed.database) {
+            parsedDatabase = parsed.database;
+        }
+        if (parsed.table) {
+            parsedTable = parsed.table;
+        }
+        // If SQL contains only table name (no database), use the passed database as fallback
+        if (parsed.table && !parsed.database && database) {
+            parsedDatabase = database;
+        }
+
+        // Get total row count if database and table are available
+        let totalRows: number | undefined = undefined;
+        if (parsedDatabase && parsedTable) {
+            try {
+                const countConnection = Utility.createConnection(connectionOptions);
+                const countResult = await Utility.queryPromise<any[]>(countConnection, `SELECT COUNT(*) as total FROM \`${parsedDatabase}\`.\`${parsedTable}\`;`);
+                totalRows = countResult && countResult[0] ? countResult[0].total : undefined;
+            } catch (err) {
+                // Ignore count query errors
+            }
+        }
+
+        OutputChannel.appendLine("[Start] Executing MySQL query...");
+        connection.query(sql, (err, rows) => {
+            if (Array.isArray(rows)) {
+                if (rows.some(((row) => Array.isArray(row)))) {
+                    rows.forEach((row, index) => {
+                        if (Array.isArray(row)) {
+                             Utility.showQueryResult(row, "Results " + (index + 1), sql, totalRows, parsedDatabase, parsedTable, updatePanel);
+                        } else {
+                            OutputChannel.appendLine(JSON.stringify(row));
+                        }
+                    });
+                } else {
+                    Utility.showQueryResult(rows, "Results", sql, totalRows, parsedDatabase, parsedTable, updatePanel);
                 }
 
             } else {
@@ -138,7 +269,7 @@ export class Utility {
         return uri.with({ query: data });
     }
 
-    private static showQueryResult(data, title: string) {
+    private static showQueryResult(data, title: string, sql?: string, totalRows?: number, database?: string, table?: string, updatePanel: boolean = false) {
         // vscode.commands.executeCommand(
         //     "vscode.previewHtml",
         //     Utility.getPreviewUri(JSON.stringify(data)),
@@ -146,7 +277,11 @@ export class Utility {
         //     title).then(() => { }, (e) => {
         //         OutputChannel.appendLine(e);
         //     });
-        SqlResultWebView.show(data, title);
+        if (updatePanel) {
+            SqlResultWebView.updatePanel(data, sql, totalRows, database, table);
+        } else {
+            SqlResultWebView.show(data, title, sql, totalRows, database, table);
+        }
     }
 
     private static async hasActiveConnection(): Promise<boolean> {
