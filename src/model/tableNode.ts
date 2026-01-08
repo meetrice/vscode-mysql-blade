@@ -46,12 +46,14 @@ export class TableNode implements INode {
 
     public getTreeItem(): vscode.TreeItem {
         const label = this.pinned ? `⭐ ${this.table}` : this.table;
-        return {
-            label: label,
-            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: this.pinned ? "pinnedTable" : "table",
-            iconPath: path.join(__filename, "..", "..", "..", "resources", "table.svg"),
-        };
+        const treeItem = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.Collapsed);
+        treeItem.contextValue = this.pinned ? "pinnedTable" : "table";
+        treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", "table.svg");
+        treeItem.id = this.getKey();
+        // Set a non-file URI to prevent SFTP extension from showing menus
+        // Use a custom scheme that SFTP won't recognize
+        treeItem.resourceUri = vscode.Uri.parse(`mysql://${this.host}/${this.database}/${this.table}`);
+        return treeItem;
     }
 
     public async pin() {

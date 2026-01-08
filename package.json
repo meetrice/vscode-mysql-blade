@@ -35,8 +35,17 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "mysql-sidebar",
+                    "title": "MySQL",
+                    "icon": "logo.png"
+                }
+            ]
+        },
         "views": {
-            "explorer": [
+            "mysql-sidebar": [
                 {
                     "id": "mysql",
                     "name": "MySQL"

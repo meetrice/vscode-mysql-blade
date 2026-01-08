@@ -13,8 +13,14 @@ export function activate(context: vscode.ExtensionContext) {
     AppInsightsClient.sendEvent("loadExtension");
 
     const mysqlTreeDataProvider = new MySQLTreeDataProvider(context);
-    
+
     Global.secrets = context.secrets;
+
+    // Set context keys to help prevent other extensions' menus from showing
+    vscode.commands.executeCommand('setContext', 'mysql.sidebarActive', true);
+    // Indicate this is not a file tree, which may prevent file sync extensions from showing menus
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', false);
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', false);
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider("mysql", mysqlTreeDataProvider));
 
@@ -236,4 +242,8 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
+    // Clear context keys when extension deactivates
+    vscode.commands.executeCommand('setContext', 'mysql.sidebarActive', undefined);
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', undefined);
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', undefined);
 }
