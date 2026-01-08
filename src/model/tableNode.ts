@@ -105,7 +105,6 @@ export class TableNode implements INode {
     public async selectTop1000() {
         AppInsightsClient.sendEvent("selectTop1000");
         const sql = `SELECT * FROM \`${this.database}\`.\`${this.table}\` LIMIT 100;`;
-        Utility.createSQLTextDocument(sql);
 
         const connection = {
             host: this.host,
@@ -118,6 +117,7 @@ export class TableNode implements INode {
         Global.activeConnection = connection;
 
         // Use runQueryWithTotal to get total row count and pass database/table info
+        // SqlResultWebView.show will handle creating the SQL document
         Utility.runQueryWithTotal(sql, this.database, this.table);
     }
 

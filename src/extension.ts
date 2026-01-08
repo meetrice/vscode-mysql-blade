@@ -22,6 +22,42 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', false);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', false);
 
+    // Track last clicked node and time for double-click detection
+    let lastClickedNode: { node: TableNode, timestamp: number } | undefined = undefined;
+    const DOUBLE_CLICK_THRESHOLD = 500; // milliseconds
+
+    const treeView = vscode.window.createTreeView("mysql", {
+        treeDataProvider: mysqlTreeDataProvider
+    });
+    context.subscriptions.push(treeView);
+
+    treeView.onDidChangeSelection(async (e) => {
+        if (e.selection.length === 1) {
+            const node = e.selection[0];
+            if (node instanceof TableNode) {
+                const now = Date.now();
+                const isDoubleClick = lastClickedNode &&
+                    lastClickedNode.node === node &&
+                    (now - lastClickedNode.timestamp) < DOUBLE_CLICK_THRESHOLD;
+
+                if (isDoubleClick) {
+                    // Double click: execute Select Top 100
+                    await vscode.commands.executeCommand("mysql.selectTop1000", node);
+                    lastClickedNode = undefined; // Reset after handling double-click
+                } else {
+                    // Single click: just track it, let default expand/collapse behavior happen
+                    lastClickedNode = { node, timestamp: now };
+                    // Auto-clear after threshold to avoid stale state
+                    setTimeout(() => {
+                        if (lastClickedNode && (Date.now() - lastClickedNode.timestamp) >= DOUBLE_CLICK_THRESHOLD) {
+                            lastClickedNode = undefined;
+                        }
+                    }, DOUBLE_CLICK_THRESHOLD);
+                }
+            }
+        }
+    });
+
     context.subscriptions.push(vscode.window.registerTreeDataProvider("mysql", mysqlTreeDataProvider));
 
     context.subscriptions.push(vscode.commands.registerCommand("mysql.refresh", (node: INode) => {

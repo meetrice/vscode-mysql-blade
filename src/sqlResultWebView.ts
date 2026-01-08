@@ -27,11 +27,17 @@ export class SqlResultWebView {
     private static currentDatabase: string | undefined = undefined;
     private static currentTable: string | undefined = undefined;
 
-    public static show(data, title, sql?: string, totalRows?: number, database?: string, table?: string) {
+    public static async show(data, title, sql?: string, totalRows?: number, database?: string, table?: string) {
         // Store current database and table for subsequent queries
         SqlResultWebView.currentDatabase = database;
         SqlResultWebView.currentTable = table;
 
+        // First, create/open SQL text document
+        await Utility.createSQLTextDocument(sql || "");
+        // Split editor into two rows (上下分栏)
+        await vscode.commands.executeCommand('workbench.action.editorLayoutTwoRows');
+
+        // Create webview panel in the bottom group (ViewColumn.Two in two-row layout)
         const panel = vscode.window.createWebviewPanel("MySQL", title, vscode.ViewColumn.Two, {
             retainContextWhenHidden: true,
             enableScripts: true,
@@ -39,6 +45,13 @@ export class SqlResultWebView {
 
         SqlResultWebView.currentPanel = panel;
         panel.webview.html = SqlResultWebView.getWebviewContent(data, sql, totalRows);
+
+        // Focus the top editor (SQL) group and resize to 30%
+        await vscode.commands.executeCommand('workbench.action.focusFirstEditorGroup');
+        // Decrease editor height to ~30% (each decrease is ~5%)
+        for (let i = 0; i < 4; i++) {
+            await vscode.commands.executeCommand('workbench.action.decreaseViewHeight');
+        }
 
         // Handle panel close event
         panel.onDidDispose(() => {
