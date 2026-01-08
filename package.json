@@ -73,6 +73,11 @@
                 "category": "MySQL"
             },
             {
+                "command": "mysql.editDisplayName",
+                "title": "Edit Display Name",
+                "category": "MySQL"
+            },
+            {
                 "command": "mysql.runQuery",
                 "title": "Run MySQL Query",
                 "category": "MySQL"
@@ -167,9 +172,14 @@
                     "group": "mysql@1"
                 },
                 {
-                    "command": "mysql.deleteConnection",
+                    "command": "mysql.editDisplayName",
                     "when": "view == mysql && viewItem == connection",
                     "group": "mysql@2"
+                },
+                {
+                    "command": "mysql.deleteConnection",
+                    "when": "view == mysql && viewItem == connection",
+                    "group": "mysql@3"
                 },
                 {
                     "command": "mysql.selectDatabase",

@@ -37,6 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
         connectionNode.deleteConnection(context, mysqlTreeDataProvider);
     }));
 
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.editDisplayName", (connectionNode: ConnectionNode) => {
+        connectionNode.editDisplayName(context, mysqlTreeDataProvider);
+    }));
+
     context.subscriptions.push(vscode.commands.registerCommand("mysql.runQuery", () => {
         Utility.runQuery();
     }));

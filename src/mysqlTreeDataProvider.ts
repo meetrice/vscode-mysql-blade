@@ -52,6 +52,11 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
 
     public async addConnection() {
         AppInsightsClient.sendEvent("addConnection.start");
+        const displayName = await vscode.window.showInputBox({ prompt: "Display name for this connection", placeHolder: "My MySQL Server", ignoreFocusOut: true });
+        if (displayName === undefined) {
+            return;
+        }
+
         const host = await vscode.window.showInputBox({ prompt: "The hostname of the database", placeHolder: "host", ignoreFocusOut: true });
         if (!host) {
             return;
@@ -89,6 +94,7 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
             user,
             port,
             certPath,
+            displayName,
         };
 
         if (password) {
@@ -109,7 +115,7 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
         if (connections) {
             for (const id of Object.keys(connections)) {
                 const password = await Global.secrets.get(id);
-                ConnectionNodes.push(new ConnectionNode(id, connections[id].host, connections[id].user, password, connections[id].port, connections[id].certPath, this));
+                ConnectionNodes.push(new ConnectionNode(id, connections[id].host, connections[id].user, password, connections[id].port, connections[id].certPath, connections[id].displayName || connections[id].host, this));
                 if (!Global.activeConnection) {
                     Global.activeConnection = {
                         host: connections[id].host,

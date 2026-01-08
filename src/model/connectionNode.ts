@@ -15,13 +15,13 @@ import { INode } from "./INode";
 export class ConnectionNode implements INode {
     constructor(private readonly id: string, private readonly host: string, private readonly user: string,
                 private readonly password: string, private readonly port: string,
-                private readonly certPath: string,
+                private readonly certPath: string, private readonly displayName: string,
                 private readonly treeDataProvider?: MySQLTreeDataProvider) {
     }
 
     public getTreeItem(): vscode.TreeItem {
         return {
-            label: this.host,
+            label: this.displayName || this.host,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
             contextValue: "connection",
             iconPath: path.join(__filename, "..", "..", "..", "resources", "server.png"),
@@ -70,5 +70,28 @@ export class ConnectionNode implements INode {
         await Global.secrets.delete(this.id);
 
         mysqlTreeDataProvider.refresh();
+    }
+
+    public async editDisplayName(context: vscode.ExtensionContext, mysqlTreeDataProvider: MySQLTreeDataProvider) {
+        AppInsightsClient.sendEvent("editDisplayName");
+        const newDisplayName = await vscode.window.showInputBox({
+            prompt: "Edit display name for this connection",
+            placeHolder: "My MySQL Server",
+            value: this.displayName,
+            ignoreFocusOut: true
+        });
+        if (newDisplayName === undefined) {
+            return;
+        }
+
+        const connections = context.globalState.get<{ [key: string]: IConnection }>(Constants.GlobalStateMySQLConectionsKey);
+        if (connections && connections[this.id]) {
+            connections[this.id] = {
+                ...connections[this.id],
+                displayName: newDisplayName
+            };
+            await context.globalState.update(Constants.GlobalStateMySQLConectionsKey, connections);
+            mysqlTreeDataProvider.refresh();
+        }
     }
 }
