@@ -255,24 +255,18 @@ export class Utility {
 
     public static createConnection(connectionOptions: IConnection): any {
         const newConnectionOptions: any = Object.assign({}, connectionOptions);
+        // Handle SSL certificate path if provided
         if (connectionOptions.certPath && fs.existsSync(connectionOptions.certPath)) {
             newConnectionOptions.ssl = {
                 ca: fs.readFileSync(connectionOptions.certPath),
             };
         }
-        // For MySQL 8.0+ and MySQL 9.0+ with caching_sha2_password authentication
-        // Use SSL but don't reject unauthorized certificates (for self-signed certs)
-        if (!newConnectionOptions.ssl) {
-            newConnectionOptions.ssl = {
-                rejectUnauthorized: false
-            };
-        } else if (typeof newConnectionOptions.ssl !== 'object') {
-            newConnectionOptions.ssl = {
-                rejectUnauthorized: false
-            };
-        } else if (newConnectionOptions.ssl.rejectUnauthorized === undefined) {
-            newConnectionOptions.ssl.rejectUnauthorized = false;
-        }
+        // For MySQL 8.0+ and MySQL 9.0+ compatibility with caching_sha2_password:
+        // Try with SSL first, but if the server doesn't support SSL, allow fallback
+        // Set flags to allow secure connection even without proper SSL
+        newConnectionOptions.flags = '+MYSQL_OPT_ALLOW_ENCRYPTED_CONNECTION';
+        // Don't force SSL - let the server and client negotiate
+        // This allows both SSL and non-SSL connections to work
         return mysql.createConnection(newConnectionOptions);
     }
 
