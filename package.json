@@ -276,7 +276,8 @@
     "dependencies": {
         "applicationinsights": "^1.0.0",
         "asciitable": "0.0.7",
-        "mysql": "^2.15.0",
+        "lru-cache": "6.0.0",
+        "mysql2": "^2.3.3",
         "uuid": "^3.1.0"
     }
 }

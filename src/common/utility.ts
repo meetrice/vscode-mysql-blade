@@ -1,7 +1,7 @@
 "use strict";
 import * as asciitable from "asciitable";
 import * as fs from "fs";
-import * as mysql from "mysql";
+import * as mysql from "mysql2";
 import * as vscode from "vscode";
 import { IConnection } from "../model/connection";
 import { SqlResultWebView } from "../sqlResultWebView";
@@ -259,6 +259,19 @@ export class Utility {
             newConnectionOptions.ssl = {
                 ca: fs.readFileSync(connectionOptions.certPath),
             };
+        }
+        // For MySQL 8.0+ and MySQL 9.0+ with caching_sha2_password authentication
+        // Use SSL but don't reject unauthorized certificates (for self-signed certs)
+        if (!newConnectionOptions.ssl) {
+            newConnectionOptions.ssl = {
+                rejectUnauthorized: false
+            };
+        } else if (typeof newConnectionOptions.ssl !== 'object') {
+            newConnectionOptions.ssl = {
+                rejectUnauthorized: false
+            };
+        } else if (newConnectionOptions.ssl.rejectUnauthorized === undefined) {
+            newConnectionOptions.ssl.rejectUnauthorized = false;
         }
         return mysql.createConnection(newConnectionOptions);
     }
