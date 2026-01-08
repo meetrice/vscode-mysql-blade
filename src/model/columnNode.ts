@@ -25,4 +25,12 @@ export class ColumnNode implements INode {
     public async getChildren(): Promise<INode[]> {
         return [];
     }
+
+    public getColumnName(): string {
+        return this.column.COLUMN_NAME;
+    }
+
+    public getColumn() {
+        return this.column;
+    }
 }

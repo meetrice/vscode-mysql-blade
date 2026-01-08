@@ -126,6 +126,16 @@
                 "command": "mysql.unpinTable",
                 "title": "Unpin Table",
                 "category": "MySQL"
+            },
+            {
+                "command": "mysql.copyColumnName",
+                "title": "Copy Name",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.insertColumnName",
+                "title": "Insert to Editor",
+                "category": "MySQL"
             }
         ],
         "keybindings": [
@@ -245,6 +255,16 @@
                     "command": "mysql.unpinTable",
                     "when": "view == mysql && viewItem == pinnedTable",
                     "group": "mysql@3"
+                },
+                {
+                    "command": "mysql.copyColumnName",
+                    "when": "view == mysql && viewItem == column",
+                    "group": "mysql@1"
+                },
+                {
+                    "command": "mysql.insertColumnName",
+                    "when": "view == mysql && viewItem == column",
+                    "group": "mysql@2"
                 }
             ]
         },
