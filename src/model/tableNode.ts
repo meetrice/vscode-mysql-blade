@@ -8,6 +8,7 @@ import { Utility } from "../common/utility";
 import { ColumnNode } from "./columnNode";
 import { InfoNode } from "./infoNode";
 import { INode } from "./INode";
+import { MySQLTreeDataProvider } from "../mysqlTreeDataProvider";
 
 // Polyfill for padEnd (not available in older TypeScript)
 function padEnd(str: string, targetLength: number, padString: string = " "): string {
@@ -24,18 +25,58 @@ function padEnd(str: string, targetLength: number, padString: string = " "): str
 }
 
 export class TableNode implements INode {
+    private treeDataProvider?: MySQLTreeDataProvider;
+
     constructor(private readonly host: string, private readonly user: string, private readonly password: string,
-                private readonly port: string, private readonly database: string, private readonly table: string,
-                private readonly certPath: string) {
+                private readonly port: string, private readonly database: string, public readonly table: string,
+                private readonly certPath: string,
+                public pinned: boolean = false,
+                treeDataProvider?: MySQLTreeDataProvider) {
+        this.treeDataProvider = treeDataProvider;
+    }
+
+    public setTreeDataProvider(treeDataProvider: MySQLTreeDataProvider): void {
+        this.treeDataProvider = treeDataProvider;
+    }
+
+    // Get unique key for this table (used for pinning)
+    public getKey(): string {
+        return `${this.host}:${this.port}:${this.database}:${this.table}`;
     }
 
     public getTreeItem(): vscode.TreeItem {
+        const label = this.pinned ? `⭐ ${this.table}` : this.table;
         return {
-            label: this.table,
+            label: label,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: "table",
+            contextValue: this.pinned ? "pinnedTable" : "table",
             iconPath: path.join(__filename, "..", "..", "..", "resources", "table.svg"),
         };
+    }
+
+    public async pin() {
+        if (this.treeDataProvider) {
+            await this.treeDataProvider.addPinnedTable(this.getKey());
+            this.pinned = true;
+            // Refresh the parent database node to show updated order
+            this.refreshParent();
+        }
+    }
+
+    public async unpin() {
+        if (this.treeDataProvider) {
+            await this.treeDataProvider.removePinnedTable(this.getKey());
+            this.pinned = false;
+            // Refresh the parent database node to show updated order
+            this.refreshParent();
+        }
+    }
+
+    private refreshParent() {
+        if (this.treeDataProvider) {
+            // Refresh the tree to update the display
+            this.treeDataProvider.refresh();
+        }
     }
 
     public async getChildren(): Promise<INode[]> {

@@ -55,6 +55,14 @@ export function activate(context: vscode.ExtensionContext) {
         tableNode.showTableStructure();
     }));
 
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.pinTable", async (tableNode: TableNode) => {
+        await tableNode.pin();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.unpinTable", async (tableNode: TableNode) => {
+        await tableNode.unpin();
+    }));
+
     context.subscriptions.push(vscode.commands.registerCommand("mysql.viewTableStructureFromEditor", async () => {
         if (!vscode.window.activeTextEditor) {
             vscode.window.showWarningMessage("No active editor");

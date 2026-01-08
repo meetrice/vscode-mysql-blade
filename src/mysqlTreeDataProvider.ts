@@ -8,6 +8,8 @@ import { IConnection } from "./model/connection";
 import { ConnectionNode } from "./model/connectionNode";
 import { INode } from "./model/INode";
 
+const PINNED_TABLES_KEY = "mysql.pinnedTables";
+
 export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
     public _onDidChangeTreeData: vscode.EventEmitter<INode> = new vscode.EventEmitter<INode>();
     public readonly onDidChangeTreeData: vscode.Event<INode> = this._onDidChangeTreeData.event;
@@ -25,6 +27,27 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
         }
 
         return element.getChildren();
+    }
+
+    public getPinnedTables(): string[] {
+        return this.context.globalState.get<string[]>(PINNED_TABLES_KEY, []);
+    }
+
+    public async addPinnedTable(tableKey: string): Promise<void> {
+        const pinnedTables = this.getPinnedTables();
+        if (pinnedTables.indexOf(tableKey) < 0) {
+            pinnedTables.push(tableKey);
+            await this.context.globalState.update(PINNED_TABLES_KEY, pinnedTables);
+        }
+    }
+
+    public async removePinnedTable(tableKey: string): Promise<void> {
+        const pinnedTables = this.getPinnedTables();
+        const index = pinnedTables.indexOf(tableKey);
+        if (index >= 0) {
+            pinnedTables.splice(index, 1);
+            await this.context.globalState.update(PINNED_TABLES_KEY, pinnedTables);
+        }
     }
 
     public async addConnection() {
@@ -86,7 +109,7 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
         if (connections) {
             for (const id of Object.keys(connections)) {
                 const password = await Global.secrets.get(id);
-                ConnectionNodes.push(new ConnectionNode(id, connections[id].host, connections[id].user, password, connections[id].port, connections[id].certPath));
+                ConnectionNodes.push(new ConnectionNode(id, connections[id].host, connections[id].user, password, connections[id].port, connections[id].certPath, this));
                 if (!Global.activeConnection) {
                     Global.activeConnection = {
                         host: connections[id].host,
