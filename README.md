@@ -121,9 +121,15 @@ By default, anonymous telemetry data is collected to understand user behavior an
 - Visual Studio Code 1.83.0 or higher
 - MySQL 5.0 or higher (including MySQL 8.0+)
 
+## Repository
+
+[GitHub Repository](https://github.com/meetrice/vscode-mysql-blade)
+
+This is an enhanced version of the original [vscode-mysql](https://github.com/formulahendry/vscode-mysql) by formulahendry.
+
 ## Contributing
 
-This is a fork/enhancement of the original [vscode-mysql](https://github.com/formulahendry/vscode-mysql) by formulahendry.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
