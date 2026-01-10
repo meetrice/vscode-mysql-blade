@@ -2,7 +2,7 @@
     "name": "mysql-blade",
     "displayName": "MySQL Blade",
     "description": "MySQL management tool",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "publisher": "meetrice",
     "icon": "logo.png",
     "engines": {
@@ -20,13 +20,13 @@
         "RDBMS"
     ],
     "bugs": {
-        "url": "https://github.com/formulahendry/vscode-mysql/issues",
-        "email": "formulahendry@gmail.com"
+        "url": "https://github.com/meetrice/vscode-mysql-blade/issues",
+        "email": "meetrice@gmail.com"
     },
-    "homepage": "https://github.com/formulahendry/vscode-mysql/blob/master/README.md",
+    "homepage": "https://github.com/meetrice/vscode-mysql-blade/blob/master/README.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/formulahendry/vscode-mysql.git"
+        "url": "https://github.com/meetrice/vscode-mysql-blade.git"
     },
     "activationEvents": [
         "onView:mysql",
