@@ -27,13 +27,20 @@ function padEnd(str: string, targetLength: number, padString: string = " "): str
 export class TableNode implements INode {
     private treeDataProvider?: MySQLTreeDataProvider;
     private tableComment: string = "";
+    private autoExpand: boolean = false;
 
     constructor(private readonly host: string, private readonly user: string, private readonly password: string,
                 private readonly port: string, private readonly database: string, public readonly table: string,
                 private readonly certPath: string,
                 public pinned: boolean = false,
-                treeDataProvider?: MySQLTreeDataProvider) {
+                treeDataProvider?: MySQLTreeDataProvider,
+                autoExpand: boolean = false) {
         this.treeDataProvider = treeDataProvider;
+        this.autoExpand = autoExpand;
+    }
+
+    public setAutoExpand(value: boolean): void {
+        this.autoExpand = value;
     }
 
     public setTreeDataProvider(treeDataProvider: MySQLTreeDataProvider): void {
@@ -54,10 +61,26 @@ export class TableNode implements INode {
         let label = this.pinned ? `⭐ ${this.table}` : this.table;
         // Add comment as tooltip
         const tooltip = this.tableComment ? `${this.table} - ${this.tableComment}` : this.table;
-        const treeItem = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.Collapsed);
+
+        // Get expand version to force TreeItem recreation
+        let expandVersion = 0;
+        try {
+            if (this.treeDataProvider && (this.treeDataProvider as any).getExpandVersion) {
+                expandVersion = (this.treeDataProvider as any).getExpandVersion() || 0;
+            }
+        } catch (e) {
+            // Ignore
+        }
+
+        // Auto-expand if column filter is active or global expand is on
+        const collapsibleState = this.autoExpand ?
+            vscode.TreeItemCollapsibleState.Expanded :
+            vscode.TreeItemCollapsibleState.Collapsed;
+        const treeItem = new vscode.TreeItem(label, collapsibleState);
         treeItem.contextValue = this.pinned ? "pinnedTable" : "table";
         treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", "table.svg");
-        treeItem.id = this.getKey();
+        // Add version to id to force TreeView to recreate the item when expand state changes
+        treeItem.id = `${this.getKey()}#v${expandVersion}`;
         treeItem.tooltip = tooltip;
         // Set description to show comment (visible in tree view)
         treeItem.description = this.tableComment || "";
@@ -102,10 +125,26 @@ export class TableNode implements INode {
             certPath: this.certPath,
         });
 
+        // Get column filter text from treeDataProvider
+        let columnFilter = "";
+        if (this.treeDataProvider && (this.treeDataProvider as any).getColumnFilterText) {
+            columnFilter = (this.treeDataProvider as any).getColumnFilterText() || "";
+        }
+
         return Utility.queryPromise<any[]>(connection, `SELECT * FROM information_schema.columns WHERE table_schema = '${this.database}' AND table_name = '${this.table}';`)
             .then((columns) => {
-                return columns.map<ColumnNode>((column) => {
-                    return new ColumnNode(this.host, this.user, this.password, this.port, this.database, column );
+                const filterLower = columnFilter.toLowerCase().trim();
+                const filteredColumns = columns.filter((column) => {
+                    if (!filterLower) return true;
+                    const columnName = (column.COLUMN_NAME || "").toLowerCase();
+                    const columnComment = (column.COLUMN_COMMENT || "").toLowerCase();
+                    const columnType = (column.COLUMN_TYPE || "").toLowerCase();
+                    return columnName.includes(filterLower) ||
+                           columnComment.includes(filterLower) ||
+                           columnType.includes(filterLower);
+                });
+                return filteredColumns.map<ColumnNode>((column) => {
+                    return new ColumnNode(this.host, this.user, this.password, this.port, this.database, column, this.table, this.certPath);
                 });
             })
             .catch((err) => {
@@ -416,5 +455,144 @@ export class TableNode implements INode {
 
     public getCertPath(): string {
         return this.certPath;
+    }
+
+    public async countTable() {
+        AppInsightsClient.sendEvent("countTable");
+        const query = `SELECT COUNT(*) AS count FROM \`${this.database}\`.\`${this.table}\`;`;
+
+        const connectionOptions = {
+            host: this.host,
+            user: this.user,
+            password: this.password,
+            port: this.port,
+            database: this.database,
+            certPath: this.certPath,
+        };
+
+        await Utility.runQuery(query, connectionOptions);
+    }
+
+    public async addColumn() {
+        AppInsightsClient.sendEvent("addColumn");
+
+        // Step 1: Get column name
+        const columnName = await vscode.window.showInputBox({
+            prompt: "Enter column name",
+            placeHolder: "column_name",
+            ignoreFocusOut: true,
+            validateInput: (value) => {
+                if (!value || !value.trim()) {
+                    return "Column name cannot be empty";
+                }
+                if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(value)) {
+                    return "Invalid column name. Use letters, numbers, and underscores, starting with a letter or underscore";
+                }
+                return null;
+            }
+        });
+
+        if (!columnName) {
+            return; // User cancelled
+        }
+
+        // Step 2: Select column type
+        const typeOptions: vscode.QuickPickItem[] = [
+            { label: "VARCHAR", description: "Variable-length string" },
+            { label: "INT", description: "Integer" },
+            { label: "BIGINT", description: "Large integer" },
+            { label: "DECIMAL", description: "Fixed-point number" },
+            { label: "TEXT", description: "Long text" },
+            { label: "DATE", description: "Date (YYYY-MM-DD)" },
+            { label: "DATETIME", description: "Date and time" },
+            { label: "TIMESTAMP", description: "Timestamp" },
+            { label: "TINYINT", description: "Small integer (0-255)" },
+            { label: "SMALLINT", description: "Small integer" },
+            { label: "FLOAT", description: "Floating-point number" },
+            { label: "DOUBLE", description: "Double precision floating-point" },
+            { label: "BOOLEAN", description: "True/False" },
+            { label: "JSON", description: "JSON data" },
+        ];
+
+        const selectedType = await vscode.window.showQuickPick(typeOptions, {
+            placeHolder: "Select column type",
+            ignoreFocusOut: true
+        });
+
+        if (!selectedType) {
+            return; // User cancelled
+        }
+
+        let columnType = selectedType.label;
+        let length: string | undefined;
+
+        // Step 3: Get length for types that require it
+        if (["VARCHAR", "CHAR", "DECIMAL", "NUMERIC"].includes(columnType)) {
+            const lengthInput = await vscode.window.showInputBox({
+                prompt: `Enter length for ${columnType}`,
+                placeHolder: columnType === "DECIMAL" || columnType === "NUMERIC" ? "10,2" : "255",
+                ignoreFocusOut: true
+            });
+            if (lengthInput) {
+                columnType = `${columnType}(${lengthInput})`;
+            }
+        }
+
+        // Step 4: Optional - nullable
+        const nullableOptions: vscode.QuickPickItem[] = [
+            { label: "NOT NULL", description: "Column cannot be null" },
+            { label: "NULL", description: "Column can be null" },
+        ];
+
+        const nullableOption = await vscode.window.showQuickPick(nullableOptions, {
+            placeHolder: "Select nullability (default: NULL)",
+            ignoreFocusOut: true
+        });
+
+        // Step 5: Optional - default value
+        const defaultValue = await vscode.window.showInputBox({
+            prompt: "Enter default value (optional)",
+            placeHolder: "Leave empty for no default",
+            ignoreFocusOut: true
+        });
+
+        // Step 6: Optional - comment
+        const comment = await vscode.window.showInputBox({
+            prompt: "Enter column comment (optional)",
+            placeHolder: "Column description",
+            ignoreFocusOut: true
+        });
+
+        // Build the ALTER TABLE SQL
+        let sql = `ALTER TABLE \`${this.database}\`.\`${this.table}\`\n`;
+        sql += `ADD COLUMN \`${columnName.trim()}\` ${columnType}`;
+
+        if (nullableOption && nullableOption.label === "NOT NULL") {
+            sql += ` NOT NULL`;
+        }
+
+        if (defaultValue !== undefined) {
+            const typeUpper = columnType.toUpperCase();
+            // Check if it's a numeric type to determine if we need quotes
+            const isNumeric = ["INT", "BIGINT", "TINYINT", "SMALLINT", "FLOAT", "DOUBLE", "DECIMAL", "NUMERIC", "BOOLEAN"].some(t => typeUpper.includes(t));
+            if (defaultValue.trim() === "") {
+                // Empty input means no default
+            } else if (defaultValue.trim().toUpperCase() === "NULL" && nullableOption?.label !== "NOT NULL") {
+                sql += ` DEFAULT NULL`;
+            } else if (isNumeric && ["CURRENT_TIMESTAMP", "NOW()"].indexOf(defaultValue.trim().toUpperCase()) === -1) {
+                sql += ` DEFAULT ${defaultValue}`;
+            } else {
+                sql += ` DEFAULT '${defaultValue.replace(/'/g, "''")}'`;
+            }
+        }
+
+        if (comment) {
+            sql += ` COMMENT '${comment.replace(/'/g, "''")}'`;
+        }
+
+        sql += ";";
+
+        // Create SQL document with the generated statement
+        await Utility.createSQLTextDocument(sql);
     }
 }

@@ -133,6 +133,16 @@
                 "category": "MySQL"
             },
             {
+                "command": "mysql.selectColumn",
+                "title": "Select Column",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.selectFilter",
+                "title": "Select Filter",
+                "category": "MySQL"
+            },
+            {
                 "command": "mysql.copyColumnName",
                 "title": "Copy Name",
                 "category": "MySQL"
@@ -153,6 +163,21 @@
                 "category": "MySQL"
             },
             {
+                "command": "mysql.countTable",
+                "title": "Count",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.addColumn",
+                "title": "Add Column",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.dropColumn",
+                "title": "Drop Column",
+                "category": "MySQL"
+            },
+            {
                 "command": "mysql.setTableFilter",
                 "title": "Filter Tables",
                 "category": "MySQL"
@@ -160,6 +185,15 @@
             {
                 "command": "mysql.clearTableFilter",
                 "title": "Clear Table Filter",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.toggleCollapseAll",
+                "title": "Collapse/Expand All",
+                "icon": {
+                    "light": "resources/light/collapse.svg",
+                    "dark": "resources/dark/collapse.svg"
+                },
                 "category": "MySQL"
             }
         ],
@@ -199,6 +233,11 @@
                     "command": "mysql.addConnection",
                     "when": "view == mysql",
                     "group": "navigation@1"
+                },
+                {
+                    "command": "mysql.toggleCollapseAll",
+                    "when": "view == mysql",
+                    "group": "navigation@2"
                 }
             ],
             "view/item/context": [
@@ -308,14 +347,49 @@
                     "group": "mysql@5"
                 },
                 {
-                    "command": "mysql.copyColumnName",
+                    "command": "mysql.countTable",
+                    "when": "view == mysql && viewItem == table",
+                    "group": "mysql@6"
+                },
+                {
+                    "command": "mysql.countTable",
+                    "when": "view == mysql && viewItem == pinnedTable",
+                    "group": "mysql@6"
+                },
+                {
+                    "command": "mysql.addColumn",
+                    "when": "view == mysql && viewItem == table",
+                    "group": "mysql@7"
+                },
+                {
+                    "command": "mysql.addColumn",
+                    "when": "view == mysql && viewItem == pinnedTable",
+                    "group": "mysql@7"
+                },
+                {
+                    "command": "mysql.selectColumn",
+                    "when": "view == mysql && viewItem == column",
+                    "group": "mysql@0"
+                },
+                {
+                    "command": "mysql.selectFilter",
                     "when": "view == mysql && viewItem == column",
                     "group": "mysql@1"
                 },
                 {
-                    "command": "mysql.insertColumnName",
+                    "command": "mysql.copyColumnName",
                     "when": "view == mysql && viewItem == column",
                     "group": "mysql@2"
+                },
+                {
+                    "command": "mysql.insertColumnName",
+                    "when": "view == mysql && viewItem == column",
+                    "group": "mysql@3"
+                },
+                {
+                    "command": "mysql.dropColumn",
+                    "when": "view == mysql && viewItem == column",
+                    "group": "mysql@4"
                 }
             ]
         },

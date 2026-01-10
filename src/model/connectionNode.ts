@@ -20,12 +20,30 @@ export class ConnectionNode implements INode {
     }
 
     public getTreeItem(): vscode.TreeItem {
-        return {
-            label: this.displayName || this.host,
-            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: "connection",
-            iconPath: path.join(__filename, "..", "..", "..", "resources", "server.png"),
-        };
+        // Check global expand state
+        let isExpanded = false;
+        let expandVersion = 0;
+        try {
+            if (this.treeDataProvider) {
+                if ((this.treeDataProvider as any).getAllExpanded) {
+                    isExpanded = (this.treeDataProvider as any).getAllExpanded() || false;
+                }
+                if ((this.treeDataProvider as any).getExpandVersion) {
+                    expandVersion = (this.treeDataProvider as any).getExpandVersion() || 0;
+                }
+            }
+        } catch (e) {
+            // Ignore
+        }
+        const treeItem = new vscode.TreeItem(
+            this.displayName || this.host,
+            isExpanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed
+        );
+        treeItem.contextValue = "connection";
+        treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", "server.png");
+        // Add version to id to force TreeView to recreate the item when expand state changes
+        treeItem.id = `${this.id}#v${expandVersion}`;
+        return treeItem;
     }
 
     public async getChildren(): Promise<INode[]> {

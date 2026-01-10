@@ -14,6 +14,9 @@ const PINNED_TABLES_KEY = "mysql.pinnedTables";
 export class TableFilterState {
     private static _instance: TableFilterState;
     private _filterText: string = "";
+    private _columnFilterText: string = "";
+    private _allExpanded: boolean = false;
+    private _expandVersion: number = 0; // Version to force TreeItem recreation
     private _onDidChangeFilter: vscode.EventEmitter<INode> = new vscode.EventEmitter<INode>();
     public readonly onDidChangeFilter: vscode.Event<INode> = this._onDidChangeFilter.event;
 
@@ -24,6 +27,27 @@ export class TableFilterState {
             TableFilterState._instance = new TableFilterState();
         }
         return TableFilterState._instance;
+    }
+
+    public get allExpanded(): boolean {
+        return this._allExpanded;
+    }
+
+    public toggleAllExpanded(): boolean {
+        this._allExpanded = !this._allExpanded;
+        this._expandVersion++; // Increment version to force TreeItem recreation
+        return this._allExpanded;
+    }
+
+    public getExpandVersion(): number {
+        return this._expandVersion;
+    }
+
+    public setAllExpanded(value: boolean): void {
+        if (this._allExpanded !== value) {
+            this._allExpanded = value;
+            this._expandVersion++; // Increment version to force TreeItem recreation
+        }
     }
 
     public get filterText(): string {
@@ -37,8 +61,20 @@ export class TableFilterState {
         }
     }
 
+    public get columnFilterText(): string {
+        return this._columnFilterText;
+    }
+
+    public setColumnFilterText(text: string): void {
+        if (this._columnFilterText !== text) {
+            this._columnFilterText = text;
+            this._onDidChangeFilter.fire(null);
+        }
+    }
+
     public clear(): void {
         this.setFilterText("");
+        this.setColumnFilterText("");
     }
 }
 
@@ -56,8 +92,32 @@ export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
         return this.filterState.filterText;
     }
 
+    public getColumnFilterText(): string {
+        return this.filterState.columnFilterText;
+    }
+
     public get onFilterChanged(): vscode.Event<INode> {
         return this.filterState.onDidChangeFilter;
+    }
+
+    public get hasTableFilter(): boolean {
+        return this.filterState.filterText.length > 0;
+    }
+
+    public get hasColumnFilter(): boolean {
+        return this.filterState.columnFilterText.length > 0;
+    }
+
+    public getAllExpanded(): boolean {
+        return this.filterState.allExpanded;
+    }
+
+    public toggleAllExpanded(): boolean {
+        return this.filterState.toggleAllExpanded();
+    }
+
+    public getExpandVersion(): number {
+        return this.filterState.getExpandVersion();
     }
 
     public getTreeItem(element: INode): Promise<vscode.TreeItem> | vscode.TreeItem {

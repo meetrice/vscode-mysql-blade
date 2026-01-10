@@ -36,6 +36,14 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(treeView);
 
+    // Make treeView accessible for collapse/expand functionality
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.toggleCollapseAll", async () => {
+        const isExpanded = TableFilterState.instance.toggleAllExpanded();
+        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', isExpanded);
+        // Force refresh by triggering tree data change event
+        mysqlTreeDataProvider.refresh();
+    }));
+
     treeView.onDidChangeSelection(async (e) => {
         if (e.selection.length === 1) {
             const node = e.selection[0];
@@ -165,6 +173,14 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand("mysql.unpinTable", async (tableNode: TableNode) => {
         await tableNode.unpin();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.countTable", async (tableNode: TableNode) => {
+        await tableNode.countTable();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.addColumn", async (tableNode: TableNode) => {
+        await tableNode.addColumn();
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand("mysql.viewTableStructureFromEditor", async () => {
@@ -339,6 +355,18 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 
     // Column node commands
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectColumn", async (columnNode: ColumnNode) => {
+        if (columnNode) {
+            await columnNode.selectColumn();
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectFilter", async (columnNode: ColumnNode) => {
+        if (columnNode) {
+            await columnNode.selectFilter();
+        }
+    }));
+
     context.subscriptions.push(vscode.commands.registerCommand("mysql.copyColumnName", (columnNode: ColumnNode) => {
         if (columnNode) {
             const columnName = columnNode.getColumnName();
@@ -359,6 +387,12 @@ export function activate(context: vscode.ExtensionContext) {
             await editor.edit(editBuilder => {
                 editBuilder.insert(position, columnName);
             });
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.dropColumn", async (columnNode: ColumnNode) => {
+        if (columnNode) {
+            await columnNode.dropColumn();
         }
     }));
 

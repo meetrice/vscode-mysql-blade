@@ -11,19 +11,43 @@ import { TableNode } from "./tableNode";
 import { MySQLTreeDataProvider } from "../mysqlTreeDataProvider";
 
 export class DatabaseNode implements INode {
+    private allExpanded: boolean = false;
+
     constructor(private readonly host: string, private readonly user: string,
                 private readonly password: string, private readonly port: string, private readonly database: string,
                 private readonly certPath: string,
                 private treeDataProvider?: MySQLTreeDataProvider) {
     }
 
+    public setAllExpanded(value: boolean): void {
+        this.allExpanded = value;
+    }
+
     public getTreeItem(): vscode.TreeItem {
-        return {
-            label: this.database,
-            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-            contextValue: "database",
-            iconPath: path.join(__filename, "..", "..", "..", "resources", "database.svg"),
-        };
+        // Check global expand state
+        let isExpanded = this.allExpanded;
+        let expandVersion = 0;
+        try {
+            if (this.treeDataProvider) {
+                if ((this.treeDataProvider as any).getAllExpanded) {
+                    isExpanded = (this.treeDataProvider as any).getAllExpanded() || false;
+                }
+                if ((this.treeDataProvider as any).getExpandVersion) {
+                    expandVersion = (this.treeDataProvider as any).getExpandVersion() || 0;
+                }
+            }
+        } catch (e) {
+            // Ignore
+        }
+        const treeItem = new vscode.TreeItem(
+            this.database,
+            isExpanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed
+        );
+        treeItem.contextValue = "database";
+        treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", "database.svg");
+        // Add version to id to force TreeView to recreate the item when expand state changes
+        treeItem.id = `${this.host}:${this.port}:${this.database}#v${expandVersion}`;
+        return treeItem;
     }
 
     public async getChildren(): Promise<INode[]> {
@@ -66,6 +90,23 @@ export class DatabaseNode implements INode {
                     .map<TableNode>((table) => {
                         const tableKey = `${this.host}:${this.port}:${this.database}:${table.TABLE_NAME}`;
                         const isPinned = pinnedTables.indexOf(tableKey) >= 0;
+                        // Check if there's a column filter active or global expand - if so, auto-expand tables
+                        let columnFilter = "";
+                        let hasColumnFilter = false;
+                        let allExpanded = false;
+                        try {
+                            if (this.treeDataProvider) {
+                                if ((this.treeDataProvider as any).getColumnFilterText) {
+                                    columnFilter = (this.treeDataProvider as any).getColumnFilterText() || "";
+                                    hasColumnFilter = columnFilter.length > 0;
+                                }
+                                if ((this.treeDataProvider as any).getAllExpanded) {
+                                    allExpanded = (this.treeDataProvider as any).getAllExpanded() || false;
+                                }
+                            }
+                        } catch (e) {
+                            // Ignore
+                        }
                         const tableNode = new TableNode(
                             this.host,
                             this.user,
@@ -75,7 +116,8 @@ export class DatabaseNode implements INode {
                             table.TABLE_NAME,
                             this.certPath,
                             isPinned,
-                            this.treeDataProvider
+                            this.treeDataProvider,
+                            hasColumnFilter || allExpanded  // Auto-expand when column filter or global expand is active
                         );
                         // Set table comment on the node for display
                         if (table.TABLE_COMMENT) {
