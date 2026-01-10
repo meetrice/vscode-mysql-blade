@@ -6,6 +6,23 @@ A powerful and efficient MySQL management tool for Visual Studio Code with advan
 ![Installs](https://img.shields.io/visual-studio-marketplace/i/meetrice.mysql-blade)
 ![Rating](https://img.shields.io/visual-studio-marketplace/r/meetrice.mysql-blade)
 
+## Screenshots
+
+![screenshot](images/screenshot.png)
+*screenshot*
+
+![count](images/count.png)
+*count*
+
+![select column](images/select%20column.png)
+*select column*
+
+![select filter](images/select%20filter.png)
+*select filter*
+
+![view table structure](images/view%20table%20structure.png)
+
+
 ## Features
 
 ### Core Functionality
@@ -97,24 +114,6 @@ Use the **Filter & Snippets** panel at the top of the sidebar:
 | `vscode-mysql.maxTableCount` | `500` | Maximum number of tables shown in tree view |
 | `vscode-mysql.enableDelimiterOperator` | `true` | Enable support for DELIMITER operator |
 | `vscode-mysql.enableTelemetry` | `true` | Anonymous usage collection |
-
-## Screenshots
-
-![Connection](images/connection.png)
-*Manage multiple MySQL connections*
-
-![Filter](images/filter.png)
-*Filter tables and columns with real-time search*
-
-## Telemetry
-
-By default, anonymous telemetry data is collected to understand user behavior and improve this extension. To disable:
-
-```json
-{
-    "vscode-mysql.enableTelemetry": false
-}
-```
 
 ## Requirements
 

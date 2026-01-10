@@ -2,7 +2,7 @@
     "name": "mysql-blade",
     "displayName": "MySQL Blade",
     "description": "MySQL management tool",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "publisher": "meetrice",
     "icon": "logo.png",
     "engines": {
