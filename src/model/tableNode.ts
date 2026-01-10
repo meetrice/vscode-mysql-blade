@@ -381,4 +381,29 @@ export class TableNode implements INode {
             vscode.window.showErrorMessage(`Error: ${err}`);
         }
     }
+
+    // Public getters for external access
+    public getDatabase(): string {
+        return this.database;
+    }
+
+    public getHost(): string {
+        return this.host;
+    }
+
+    public getUser(): string {
+        return this.user;
+    }
+
+    public getPassword(): string {
+        return this.password;
+    }
+
+    public getPort(): string {
+        return this.port;
+    }
+
+    public getCertPath(): string {
+        return this.certPath;
+    }
 }

@@ -342,6 +342,94 @@ export function activate(context: vscode.ExtensionContext) {
             });
         }
     }));
+
+    // Table node commands - Drop Table
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.dropTable", async (tableNode: TableNode) => {
+        if (!tableNode) {
+            return;
+        }
+
+        const tableName = tableNode.table;
+        const databaseName = tableNode.getDatabase();
+
+        const confirm = await vscode.window.showWarningMessage(
+            `Are you sure you want to drop table \`${databaseName}\.\`${tableName}\`? This action cannot be undone.`,
+            "Yes",
+            "No"
+        );
+
+        if (confirm !== "Yes") {
+            return;
+        }
+
+        try {
+            const connection = Utility.createConnection({
+                host: tableNode.getHost(),
+                user: tableNode.getUser(),
+                password: tableNode.getPassword(),
+                port: tableNode.getPort(),
+                database: databaseName,
+                certPath: tableNode.getCertPath(),
+            });
+
+            await Utility.queryPromise(connection, `DROP TABLE \`${databaseName}\`.\`${tableName}\`;`);
+            vscode.window.showInformationMessage(`Table \`${tableName}\` dropped successfully.`);
+            mysqlTreeDataProvider.refresh();
+        } catch (err) {
+            vscode.window.showErrorMessage(`Error dropping table: ${err}`);
+        }
+    }));
+
+    // Helper function to pad string with zeros
+    function padZero(num: number): string {
+        return num < 10 ? "0" + num : String(num);
+    }
+
+    // Table node commands - Backup Table
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.backupTable", async (tableNode: TableNode) => {
+        if (!tableNode) {
+            return;
+        }
+
+        const tableName = tableNode.table;
+        const databaseName = tableNode.getDatabase();
+
+        // Generate timestamp: YYYYMMDDHHmmss
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = padZero(now.getMonth() + 1);
+        const day = padZero(now.getDate());
+        const hours = padZero(now.getHours());
+        const minutes = padZero(now.getMinutes());
+        const seconds = padZero(now.getSeconds());
+        const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+        const backupTableName = `${tableName}_${timestamp}`;
+
+        const connectionOptions = {
+            host: tableNode.getHost(),
+            user: tableNode.getUser(),
+            password: tableNode.getPassword(),
+            port: tableNode.getPort(),
+            database: databaseName,
+            certPath: tableNode.getCertPath(),
+        };
+
+        try {
+            // Create backup table structure
+            const conn1 = Utility.createConnection(connectionOptions);
+            await Utility.queryPromise(conn1, `CREATE TABLE \`${databaseName}\`.\`${backupTableName}\` LIKE \`${databaseName}\`.\`${tableName}\`;`);
+
+            // Copy data
+            const conn2 = Utility.createConnection(connectionOptions);
+            await Utility.queryPromise(conn2, `INSERT INTO \`${databaseName}\`.\`${backupTableName}\` SELECT * FROM \`${databaseName}\`.\`${tableName}\`;`);
+
+            vscode.window.showInformationMessage(`Table backed up as \`${backupTableName}\``);
+            mysqlTreeDataProvider.refresh();
+        } catch (err) {
+            vscode.window.showErrorMessage(`Error backing up table: ${err}`);
+        }
+    }));
 }
 
 export function deactivate() {

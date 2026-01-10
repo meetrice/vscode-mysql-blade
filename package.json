@@ -136,6 +136,16 @@
                 "command": "mysql.insertColumnName",
                 "title": "Insert to Editor",
                 "category": "MySQL"
+            },
+            {
+                "command": "mysql.dropTable",
+                "title": "Drop Table",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.backupTable",
+                "title": "Backup Table",
+                "category": "MySQL"
             }
         ],
         "keybindings": [
@@ -255,6 +265,26 @@
                     "command": "mysql.unpinTable",
                     "when": "view == mysql && viewItem == pinnedTable",
                     "group": "mysql@3"
+                },
+                {
+                    "command": "mysql.backupTable",
+                    "when": "view == mysql && viewItem == table",
+                    "group": "mysql@4"
+                },
+                {
+                    "command": "mysql.backupTable",
+                    "when": "view == mysql && viewItem == pinnedTable",
+                    "group": "mysql@4"
+                },
+                {
+                    "command": "mysql.dropTable",
+                    "when": "view == mysql && viewItem == table",
+                    "group": "mysql@5"
+                },
+                {
+                    "command": "mysql.dropTable",
+                    "when": "view == mysql && viewItem == pinnedTable",
+                    "group": "mysql@5"
                 },
                 {
                     "command": "mysql.copyColumnName",
