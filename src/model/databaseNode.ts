@@ -36,16 +36,53 @@ export class DatabaseNode implements INode {
             certPath: this.certPath,
         });
 
-        return Utility.queryPromise<any[]>(connection, `SELECT TABLE_NAME FROM information_schema.TABLES  WHERE TABLE_SCHEMA = '${this.database}' LIMIT ${Utility.maxTableCount}`)
+        // Query both table name and comment
+        return Utility.queryPromise<any[]>(connection, `SELECT TABLE_NAME, TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = '${this.database}' LIMIT ${Utility.maxTableCount}`)
             .then((tables) => {
                 // Get pinned tables from global state
                 const pinnedTables: string[] = this.treeDataProvider ? this.treeDataProvider.getPinnedTables() : [];
 
-                const tableNodes = tables.map<TableNode>((table) => {
-                    const tableKey = `${this.host}:${this.port}:${this.database}:${table.TABLE_NAME}`;
-                    const isPinned = pinnedTables.indexOf(tableKey) >= 0;
-                    return new TableNode(this.host, this.user, this.password, this.port, this.database, table.TABLE_NAME, this.certPath, isPinned, this.treeDataProvider);
-                });
+                // Get filter text from global filter state (import dynamically to avoid circular dependency)
+                let filterText = "";
+                try {
+                    // Access the filter state through the treeDataProvider if available
+                    if (this.treeDataProvider && (this.treeDataProvider as any).getFilterText) {
+                        filterText = (this.treeDataProvider as any).getFilterText() || "";
+                    }
+                } catch (e) {
+                    // Ignore if filter is not available
+                }
+
+                const filterLower = filterText.toLowerCase().trim();
+
+                const tableNodes = tables
+                    .filter((table) => {
+                        if (!filterLower) return true;
+                        const tableName = (table.TABLE_NAME || "").toLowerCase();
+                        const tableComment = (table.TABLE_COMMENT || "").toLowerCase();
+                        // Support fuzzy matching for both table name and comment
+                        return tableName.includes(filterLower) || tableComment.includes(filterLower);
+                    })
+                    .map<TableNode>((table) => {
+                        const tableKey = `${this.host}:${this.port}:${this.database}:${table.TABLE_NAME}`;
+                        const isPinned = pinnedTables.indexOf(tableKey) >= 0;
+                        const tableNode = new TableNode(
+                            this.host,
+                            this.user,
+                            this.password,
+                            this.port,
+                            this.database,
+                            table.TABLE_NAME,
+                            this.certPath,
+                            isPinned,
+                            this.treeDataProvider
+                        );
+                        // Set table comment on the node for display
+                        if (table.TABLE_COMMENT) {
+                            tableNode.setTableComment(table.TABLE_COMMENT);
+                        }
+                        return tableNode;
+                    });
 
                 // Sort: pinned tables first (in order of pinning), then alphabetical
                 tableNodes.sort((a, b) => {

@@ -7,7 +7,8 @@ import { DatabaseNode } from "./model/databaseNode";
 import { INode } from "./model/INode";
 import { TableNode } from "./model/tableNode";
 import { ColumnNode } from "./model/columnNode";
-import { MySQLTreeDataProvider } from "./mysqlTreeDataProvider";
+import { MySQLTreeDataProvider, TableFilterState } from "./mysqlTreeDataProvider";
+import { FilterInputPanel } from "./filterInputPanel";
 import { Global } from "./common/global";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -22,6 +23,9 @@ export function activate(context: vscode.ExtensionContext) {
     // Indicate this is not a file tree, which may prevent file sync extensions from showing menus
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', false);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', false);
+
+    // Initialize filter input panel FIRST (before tree view) so it appears above
+    FilterInputPanel.initialize(context);
 
     // Track last clicked node and time for double-click detection
     let lastClickedNode: { node: INode, timestamp: number } | undefined = undefined;
@@ -98,6 +102,21 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(vscode.window.registerTreeDataProvider("mysql", mysqlTreeDataProvider));
+
+    // Refresh tree when filter changes
+    mysqlTreeDataProvider.onFilterChanged(() => {
+        mysqlTreeDataProvider.refresh();
+    });
+
+    // Filter commands (also available via command palette)
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.setTableFilter", async () => {
+        // Filter panel is always visible in sidebar
+        vscode.commands.executeCommand('mysqlFilter.focus');
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.clearTableFilter", () => {
+        TableFilterState.instance.clear();
+    }));
 
     context.subscriptions.push(vscode.commands.registerCommand("mysql.refresh", (node: INode) => {
         AppInsightsClient.sendEvent("refresh");

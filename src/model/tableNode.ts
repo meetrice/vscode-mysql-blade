@@ -26,6 +26,7 @@ function padEnd(str: string, targetLength: number, padString: string = " "): str
 
 export class TableNode implements INode {
     private treeDataProvider?: MySQLTreeDataProvider;
+    private tableComment: string = "";
 
     constructor(private readonly host: string, private readonly user: string, private readonly password: string,
                 private readonly port: string, private readonly database: string, public readonly table: string,
@@ -39,17 +40,27 @@ export class TableNode implements INode {
         this.treeDataProvider = treeDataProvider;
     }
 
+    // Set table comment for display and filtering
+    public setTableComment(comment: string): void {
+        this.tableComment = comment;
+    }
+
     // Get unique key for this table (used for pinning)
     public getKey(): string {
         return `${this.host}:${this.port}:${this.database}:${this.table}`;
     }
 
     public getTreeItem(): vscode.TreeItem {
-        const label = this.pinned ? `⭐ ${this.table}` : this.table;
+        let label = this.pinned ? `⭐ ${this.table}` : this.table;
+        // Add comment as tooltip
+        const tooltip = this.tableComment ? `${this.table} - ${this.tableComment}` : this.table;
         const treeItem = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.Collapsed);
         treeItem.contextValue = this.pinned ? "pinnedTable" : "table";
         treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", "table.svg");
         treeItem.id = this.getKey();
+        treeItem.tooltip = tooltip;
+        // Set description to show comment (visible in tree view)
+        treeItem.description = this.tableComment || "";
         // Set a non-file URI to prevent SFTP extension from showing menus
         // Use a custom scheme that SFTP won't recognize
         treeItem.resourceUri = vscode.Uri.parse(`mysql://${this.host}/${this.database}/${this.table}`);

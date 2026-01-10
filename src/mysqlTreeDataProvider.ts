@@ -10,11 +10,54 @@ import { INode } from "./model/INode";
 
 const PINNED_TABLES_KEY = "mysql.pinnedTables";
 
+// Global filter state for table filtering
+export class TableFilterState {
+    private static _instance: TableFilterState;
+    private _filterText: string = "";
+    private _onDidChangeFilter: vscode.EventEmitter<INode> = new vscode.EventEmitter<INode>();
+    public readonly onDidChangeFilter: vscode.Event<INode> = this._onDidChangeFilter.event;
+
+    private constructor() {}
+
+    public static get instance(): TableFilterState {
+        if (!TableFilterState._instance) {
+            TableFilterState._instance = new TableFilterState();
+        }
+        return TableFilterState._instance;
+    }
+
+    public get filterText(): string {
+        return this._filterText;
+    }
+
+    public setFilterText(text: string): void {
+        if (this._filterText !== text) {
+            this._filterText = text;
+            this._onDidChangeFilter.fire(null);
+        }
+    }
+
+    public clear(): void {
+        this.setFilterText("");
+    }
+}
+
 export class MySQLTreeDataProvider implements vscode.TreeDataProvider<INode> {
     public _onDidChangeTreeData: vscode.EventEmitter<INode> = new vscode.EventEmitter<INode>();
     public readonly onDidChangeTreeData: vscode.Event<INode> = this._onDidChangeTreeData.event;
 
+    private filterState: TableFilterState;
+
     constructor(private context: vscode.ExtensionContext) {
+        this.filterState = TableFilterState.instance;
+    }
+
+    public getFilterText(): string {
+        return this.filterState.filterText;
+    }
+
+    public get onFilterChanged(): vscode.Event<INode> {
+        return this.filterState.onDidChangeFilter;
     }
 
     public getTreeItem(element: INode): Promise<vscode.TreeItem> | vscode.TreeItem {

@@ -47,6 +47,11 @@
         "views": {
             "mysql-sidebar": [
                 {
+                    "id": "mysqlFilter",
+                    "name": "Filter",
+                    "type": "webview"
+                },
+                {
                     "id": "mysql",
                     "name": "MySQL"
                 }
@@ -146,6 +151,16 @@
                 "command": "mysql.backupTable",
                 "title": "Backup Table",
                 "category": "MySQL"
+            },
+            {
+                "command": "mysql.setTableFilter",
+                "title": "Filter Tables",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.clearTableFilter",
+                "title": "Clear Table Filter",
+                "category": "MySQL"
             }
         ],
         "keybindings": [
@@ -160,6 +175,12 @@
                 "mac": "cmd+shift+t",
                 "win": "ctrl+shift+t",
                 "linux": "ctrl+shift+t"
+            },
+            {
+                "command": "mysql.setTableFilter",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f",
+                "when": "view == mysql"
             }
         ],
         "menus": {
