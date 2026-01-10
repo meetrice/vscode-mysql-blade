@@ -1,0 +1,1 @@
+SELECT * FROM `wecomf`.`fa_area` LIMIT 100;
