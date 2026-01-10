@@ -220,10 +220,21 @@ class FilterViewProvider implements vscode.WebviewViewProvider {
             <button id="columnClearBtn" class="clear-btn">✕</button>
         </div>
         <div class="quick-actions">
-            <button class="quick-btn" data-text="SELECT * FROM ">SELECT * FROM</button>
+            <button class="quick-btn" data-text="SELECT * FROM ">SELECT *</button>
+            <button class="quick-btn" data-text="SELECT COUNT(*) FROM ">COUNT</button>
             <button class="quick-btn" data-text="WHERE ">WHERE</button>
+            <button class="quick-btn" data-text="AND ">AND</button>
+            <button class="quick-btn" data-text="OR ">OR</button>
+            <button class="quick-btn" data-text="ORDER BY ">ORDER BY</button>
+            <button class="quick-btn" data-text="GROUP BY ">GROUP BY</button>
             <button class="quick-btn" data-text="LIMIT ">LIMIT</button>
             <button class="quick-btn" data-text="LIKE '%">LIKE</button>
+            <button class="quick-btn" data-text="IN ()">IN</button>
+            <button class="quick-btn" data-text="INSERT INTO  VALUES ()">INSERT</button>
+            <button class="quick-btn" data-text="UPDATE  SET ">UPDATE</button>
+            <button class="quick-btn" data-text="DELETE FROM ">DELETE</button>
+            <button class="quick-btn" data-text="JOIN ">JOIN</button>
+            <button class="quick-btn" data-text="LEFT JOIN ">LEFT JOIN</button>
         </div>
     </div>
 

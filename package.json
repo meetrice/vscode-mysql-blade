@@ -1,9 +1,9 @@
 {
-    "name": "vscode-mysql",
-    "displayName": "MySQL",
+    "name": "mysql-blade",
+    "displayName": "MySQL Blade",
     "description": "MySQL management tool",
     "version": "0.5.0",
-    "publisher": "formulahendry",
+    "publisher": "meetrice",
     "icon": "logo.png",
     "engines": {
         "vscode": "^1.83.0"
@@ -48,7 +48,7 @@
             "mysql-sidebar": [
                 {
                     "id": "mysqlFilter",
-                    "name": "Filter",
+                    "name": "Filter & Snippets",
                     "type": "webview"
                 },
                 {
@@ -188,12 +188,23 @@
                 "category": "MySQL"
             },
             {
-                "command": "mysql.toggleCollapseAll",
-                "title": "Collapse/Expand All",
+                "command": "mysql.collapseAll",
+                "title": "Collapse All",
                 "icon": {
                     "light": "resources/light/collapse.svg",
                     "dark": "resources/dark/collapse.svg"
                 },
+                "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
+                "category": "MySQL"
+            },
+            {
+                "command": "mysql.expandAll",
+                "title": "Expand All",
+                "icon": {
+                    "light": "resources/light/expand.svg",
+                    "dark": "resources/dark/expand.svg"
+                },
+                "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
                 "category": "MySQL"
             }
         ],
@@ -235,8 +246,13 @@
                     "group": "navigation@1"
                 },
                 {
-                    "command": "mysql.toggleCollapseAll",
-                    "when": "view == mysql",
+                    "command": "mysql.expandAll",
+                    "when": "view == mysql && !mysqlTreeAllExpanded",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "mysql.collapseAll",
+                    "when": "view == mysql && mysqlTreeAllExpanded",
                     "group": "navigation@2"
                 }
             ],

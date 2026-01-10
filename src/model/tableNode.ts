@@ -131,7 +131,7 @@ export class TableNode implements INode {
             columnFilter = (this.treeDataProvider as any).getColumnFilterText() || "";
         }
 
-        return Utility.queryPromise<any[]>(connection, `SELECT * FROM information_schema.columns WHERE table_schema = '${this.database}' AND table_name = '${this.table}';`)
+        return Utility.queryPromise<any[]>(connection, `SELECT * FROM information_schema.columns WHERE table_schema = '${this.database}' AND table_name = '${this.table}' ORDER BY ORDINAL_POSITION;`)
             .then((columns) => {
                 const filterLower = columnFilter.toLowerCase().trim();
                 const filteredColumns = columns.filter((column) => {

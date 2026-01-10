@@ -57,7 +57,12 @@ export class ConnectionNode implements INode {
 
         return Utility.queryPromise<any[]>(connection, "SHOW DATABASES")
             .then((databases) => {
-                return databases.map<DatabaseNode>((database) => {
+                // Filter out system databases
+                const systemDatabases = ['information_schema', 'mysql', 'performance_schema', 'sys'];
+                const filteredDatabases = databases.filter((db: any) =>
+                    !systemDatabases.includes(db.Database)
+                );
+                return filteredDatabases.map<DatabaseNode>((database) => {
                     return new DatabaseNode(this.host, this.user, this.password, this.port, database.Database, this.certPath, this.treeDataProvider);
                 });
             })

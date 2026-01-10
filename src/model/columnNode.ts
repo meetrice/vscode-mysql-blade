@@ -15,12 +15,26 @@ export class ColumnNode implements INode {
     }
 
     public getTreeItem(): vscode.TreeItem {
-        return {
-            label: `${this.column.COLUMN_NAME} : ${this.column.COLUMN_TYPE}     \n${this.column.COLUMN_COMMENT}`,
-            collapsibleState: vscode.TreeItemCollapsibleState.None,
-            contextValue: "column",
-            iconPath: path.join(__filename, "..", "..", "..", "resources", this.column.COLUMN_KEY === "PRI" ? "b_primary.png" : "b_props.png"),
-        };
+        const comment = this.column.COLUMN_COMMENT || "";
+        const columnName = this.column.COLUMN_NAME;
+        const columnType = this.column.COLUMN_TYPE;
+
+        // Use tooltip for colored display (hover shows formatted info)
+        const tooltip = comment ?
+            `${columnName}  :  ${columnType}  :  ${comment}` :
+            `${columnName}  :  ${columnType}`;
+
+        // Shorter padding for cleaner look
+        const label = comment ?
+            `${columnName} : ${columnType}   ${comment}` :
+            `${columnName} : ${columnType}`;
+
+        const treeItem = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
+        treeItem.contextValue = "column";
+        treeItem.iconPath = path.join(__filename, "..", "..", "..", "resources", this.column.COLUMN_KEY === "PRI" ? "b_primary.png" : "b_props.png");
+        treeItem.tooltip = tooltip;
+
+        return treeItem;
     }
 
     public async getChildren(): Promise<INode[]> {
@@ -47,7 +61,7 @@ export class ColumnNode implements INode {
         }
 
         const columnName = this.column.COLUMN_NAME;
-        const query = `SELECT \`${columnName}\`\nFROM \`${this.database}\`.\`${this.tableName}\`\nLIMIT 1000;`;
+        const query = `SELECT \`${columnName}\`\nFROM \`${this.database}\`.\`${this.tableName}\`\nORDER BY \`id\` DESC\nLIMIT 100;`;
 
         const connectionOptions = {
             host: this.host,

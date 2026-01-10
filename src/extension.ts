@@ -37,9 +37,26 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(treeView);
 
     // Make treeView accessible for collapse/expand functionality
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.toggleCollapseAll", async () => {
-        const isExpanded = TableFilterState.instance.toggleAllExpanded();
-        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', isExpanded);
+    const warningMessage = "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃";
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.expandAll", async () => {
+        const confirm = await vscode.window.showWarningMessage(warningMessage, "继续", "取消");
+        if (confirm !== "继续") {
+            return;
+        }
+        TableFilterState.instance.setAllExpanded(true);
+        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', true);
+        // Force refresh by triggering tree data change event
+        mysqlTreeDataProvider.refresh();
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand("mysql.collapseAll", async () => {
+        const confirm = await vscode.window.showWarningMessage(warningMessage, "继续", "取消");
+        if (confirm !== "继续") {
+            return;
+        }
+        TableFilterState.instance.setAllExpanded(false);
+        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', false);
         // Force refresh by triggering tree data change event
         mysqlTreeDataProvider.refresh();
     }));
@@ -62,39 +79,6 @@ export function activate(context: vscode.ExtensionContext) {
                 if (isDoubleClick) {
                     // Double click: execute Select Top 100
                     await vscode.commands.executeCommand("mysql.selectTop1000", node);
-                    lastClickedNode = undefined;
-                } else {
-                    // Single click: just track it
-                    lastClickedNode = { node, timestamp: now };
-                    setTimeout(() => {
-                        if (lastClickedNode && (Date.now() - lastClickedNode.timestamp) >= DOUBLE_CLICK_THRESHOLD) {
-                            lastClickedNode = undefined;
-                        }
-                    }, DOUBLE_CLICK_THRESHOLD);
-                }
-            }
-            // Handle ColumnNode double-click - insert column name at cursor
-            else if (contextValue === "column") {
-                const isDoubleClick = lastClickedNode &&
-                    lastClickedNode.node === node &&
-                    (now - lastClickedNode.timestamp) < DOUBLE_CLICK_THRESHOLD;
-
-                if (isDoubleClick) {
-                    // Double click: insert column name
-                    if (node instanceof ColumnNode) {
-                        const columnName = node.getColumnName();
-                        if (columnName) {
-                            if (!vscode.window.activeTextEditor) {
-                                vscode.window.showWarningMessage("No active editor to insert column name");
-                            } else {
-                                const editor = vscode.window.activeTextEditor;
-                                const position = editor.selection.active;
-                                await editor.edit(editBuilder => {
-                                    editBuilder.insert(position, columnName);
-                                });
-                            }
-                        }
-                    }
                     lastClickedNode = undefined;
                 } else {
                     // Single click: just track it

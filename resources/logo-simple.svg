@@ -1,0 +1,16 @@
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00758F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00546B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Rounded rectangle background -->
+  <rect x="28" y="28" width="200" height="200" rx="40" fill="url(#bg)"/>
+  <!-- Database cylinder icon -->
+  <ellipse cx="128" cy="80" rx="50" ry="15" fill="#FFFFFF" opacity="0.9"/>
+  <path d="M78 80v40c0 8 22 15 50 15s50-7 50-15V80" fill="#FFFFFF" opacity="0.7"/>
+  <path d="M78 120v40c0 8 22 15 50 15s50-7 50-15v-40" fill="#FFFFFF" opacity="0.5"/>
+  <!-- MySQL text -->
+  <text x="128" y="195" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF" text-anchor="middle">MySQL</text>
+</svg>

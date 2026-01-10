@@ -46,10 +46,10 @@ export class SqlResultWebView {
         SqlResultWebView.currentPanel = panel;
         panel.webview.html = SqlResultWebView.getWebviewContent(data, sql, totalRows);
 
-        // Focus the top editor (SQL) group and resize to 30%
+        // Focus the top editor (SQL) group and resize to ~40%
         await vscode.commands.executeCommand('workbench.action.focusFirstEditorGroup');
-        // Decrease editor height to ~30% (each decrease is ~5%)
-        for (let i = 0; i < 4; i++) {
+        // Decrease editor height to ~40% (each decrease is ~5%)
+        for (let i = 0; i < 2; i++) {
             await vscode.commands.executeCommand('workbench.action.decreaseViewHeight');
         }
 
