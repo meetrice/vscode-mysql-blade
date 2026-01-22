@@ -749,11 +749,11 @@ export class SqlResultWebView {
                     <div class="page-size-selector">
                         <span class="page-size-label">Rows per page:</span>
                         <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize()">
-                            <option value="5" ${rows.length > 0 && rows.length <= 5 ? 'selected' : ''}>5</option>
+                            <option value="5">5</option>
                             <option value="10" selected>10</option>
-                            <option value="20" ${rows.length >= 20 ? 'selected' : ''}>20</option>
-                            <option value="50" ${rows.length >= 50 ? 'selected' : ''}>50</option>
-                            <option value="100" ${rows.length >= 100 ? 'selected' : ''}>100</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
                         </select>
                     </div>
                     <div class="pagination-pages" id="paginationPages">
