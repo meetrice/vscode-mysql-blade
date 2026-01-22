@@ -2,7 +2,7 @@
     "name": "mysql-instant-query",
     "displayName": "Mysql Instant Query",
     "description": "MySQL instant query tool",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "publisher": "meetrice",
     "icon": "logo.png",
     "engines": {
@@ -257,6 +257,58 @@
                 }
             ],
             "view/item/context": [
+                {
+                    "command": "workbench.action.files.uploadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.remote.uploadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.files.downloadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.remote.uploadFolderToAllProfiles",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.remote.downloadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.remote.syncFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "workbench.action.remote.deleteFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "sftp.uploadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "sftp.downloadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "sftp.uploadFolderToAllProfiles",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "ftp-sync.uploadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "ftp-sync.downloadFolder",
+                    "when": "view != mysqlInstantQuery"
+                },
+                {
+                    "command": "ftp-sync.uploadFolderToAllProfiles",
+                    "when": "view != mysqlInstantQuery"
+                },
                 {
                     "command": "mysqlInstantQuery.newQuery",
                     "when": "view == mysqlInstantQuery && viewItem == connection",

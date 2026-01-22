@@ -23,6 +23,15 @@ export function activate(context: vscode.ExtensionContext) {
     // Indicate this is not a file tree, which may prevent file sync extensions from showing menus
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', false);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', false);
+    // Additional context keys to prevent file sync/upload menus
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsFile', false);
+    vscode.commands.executeCommand('setContext', 'filesExplorerFocus', false);
+    vscode.commands.executeCommand('setContext', 'inFilesExplorer', false);
+    // More context keys to block file sync extensions
+    vscode.commands.executeCommand('setContext', 'resourceScheme', undefined);
+    vscode.commands.executeCommand('setContext', 'resourcePath', undefined);
+    vscode.commands.executeCommand('setContext', 'resourceExtname', undefined);
+    vscode.commands.executeCommand('setContext', 'resourceLangId', undefined);
 
     // Initialize filter input panel FIRST (before tree view) so it appears above
     FilterInputPanel.initialize(context);
@@ -474,4 +483,11 @@ export function deactivate() {
     vscode.commands.executeCommand('setContext', 'mysqlInstantQuery.sidebarActive', undefined);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', undefined);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', undefined);
+    vscode.commands.executeCommand('setContext', 'explorerResourceIsFile', undefined);
+    vscode.commands.executeCommand('setContext', 'filesExplorerFocus', undefined);
+    vscode.commands.executeCommand('setContext', 'inFilesExplorer', undefined);
+    vscode.commands.executeCommand('setContext', 'resourceScheme', undefined);
+    vscode.commands.executeCommand('setContext', 'resourcePath', undefined);
+    vscode.commands.executeCommand('setContext', 'resourceExtname', undefined);
+    vscode.commands.executeCommand('setContext', 'resourceLangId', undefined);
 }
