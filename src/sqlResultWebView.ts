@@ -692,7 +692,7 @@ export class SqlResultWebView {
             : "";
         const headerInfo = `<div class="query-bar">
             <input type="text" id="sqlInput" class="query-input" value="${sqlValue}" placeholder="Enter SQL query...">
-            <button class="run-btn" onclick="runQuery()">运行a</button>
+            <button class="run-btn" onclick="runQuery()">RUN</button>
             ${totalInfo}
         </div>`;
         let body = headerInfo + "<table><thead><tr>" + head + "</tr><tr>" + filterRow + "</tr></thead><tbody>";

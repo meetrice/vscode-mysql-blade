@@ -259,123 +259,153 @@
             "view/item/context": [
                 {
                     "command": "mysqlInstantQuery.newQuery",
-                    "when": "view == mysqlInstantQuery && viewItem == connection"
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.refresh",
-                    "when": "view == mysqlInstantQuery && viewItem == connection"
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.editDisplayName",
-                    "when": "view == mysqlInstantQuery && viewItem == connection"
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
                     "command": "mysqlInstantQuery.deleteConnection",
-                    "when": "view == mysqlInstantQuery && viewItem == connection"
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
                     "command": "mysqlInstantQuery.selectDatabase",
-                    "when": "view == mysqlInstantQuery && viewItem == database"
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
                     "command": "mysqlInstantQuery.newQuery",
-                    "when": "view == mysqlInstantQuery && viewItem == database"
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.refresh",
-                    "when": "view == mysqlInstantQuery && viewItem == database"
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
                     "command": "mysqlInstantQuery.copyTableName",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.copyTableName",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.showTableStructure",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.showTableStructure",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.selectTop1000",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
                     "command": "mysqlInstantQuery.selectTop1000",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
                     "command": "mysqlInstantQuery.refresh",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
                     "command": "mysqlInstantQuery.refresh",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
                     "command": "mysqlInstantQuery.pinTable",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
                     "command": "mysqlInstantQuery.unpinTable",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
                     "command": "mysqlInstantQuery.backupTable",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@4"
                 },
                 {
                     "command": "mysqlInstantQuery.backupTable",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@4"
                 },
                 {
                     "command": "mysqlInstantQuery.dropTable",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@5"
                 },
                 {
                     "command": "mysqlInstantQuery.dropTable",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@5"
                 },
                 {
                     "command": "mysqlInstantQuery.countTable",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@6"
                 },
                 {
                     "command": "mysqlInstantQuery.countTable",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@6"
                 },
                 {
                     "command": "mysqlInstantQuery.addColumn",
-                    "when": "view == mysqlInstantQuery && viewItem == table"
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@7"
                 },
                 {
                     "command": "mysqlInstantQuery.addColumn",
-                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable"
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@7"
                 },
                 {
                     "command": "mysqlInstantQuery.selectColumn",
-                    "when": "view == mysqlInstantQuery && viewItem == column"
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
                     "command": "mysqlInstantQuery.selectFilter",
-                    "when": "view == mysqlInstantQuery && viewItem == column"
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
                     "command": "mysqlInstantQuery.copyColumnName",
-                    "when": "view == mysqlInstantQuery && viewItem == column"
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
                     "command": "mysqlInstantQuery.insertColumnName",
-                    "when": "view == mysqlInstantQuery && viewItem == column"
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
                     "command": "mysqlInstantQuery.dropColumn",
-                    "when": "view == mysqlInstantQuery && viewItem == column"
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@4"
                 }
             ]
         },
