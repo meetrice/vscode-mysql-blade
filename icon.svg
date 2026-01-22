@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="128" height="128" rx="28" fill="#ffffff"/>
+  <rect width="128" height="128" rx="28" fill="none" stroke="#000000" stroke-width="3"/>
+  
+  <!-- Database stack -->
+  <ellipse cx="64" cy="85" rx="25" ry="8" fill="none" stroke="#000000" stroke-width="3"/>
+  <path d="M39 70 v15 c0 4.5 11 8 25 8 s25 -3.5 25 -8 v-15" fill="none" stroke="#000000" stroke-width="3"/>
+  
+  <ellipse cx="64" cy="70" rx="25" ry="8" fill="none" stroke="#000000" stroke-width="3"/>
+  <path d="M39 55 v15 c0 4.5 11 8 25 8 s25 -3.5 25 -8 v-15" fill="none" stroke="#000000" stroke-width="3"/>
+  
+  <ellipse cx="64" cy="55" rx="25" ry="8" fill="none" stroke="#000000" stroke-width="3"/>
+  <path d="M39 55 v0 c0 4.5 11 8 25 8 s25 -3.5 25 -8 v0" fill="none" stroke="#000000" stroke-width="3"/>
+  
+  <!-- Blade -->
+  <g transform="translate(80, 40) rotate(45)">
+    <path d="M0 0 L15 0 L18 3 L3 18 L0 15 Z" fill="none" stroke="#000000" stroke-width="2.5"/>
+    <path d="M3 18 L0 21 L3 24 L6 21 Z" fill="#000000"/>
+  </g>
+</svg>
