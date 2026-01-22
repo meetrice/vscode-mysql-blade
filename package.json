@@ -1,7 +1,7 @@
 {
     "name": "mysql-blade",
     "displayName": "MySQL Blade",
-    "description": "MySQL management tool",
+    "description": "MySQL Blade management tool",
     "version": "0.5.5",
     "publisher": "meetrice",
     "icon": "logo.png",
@@ -29,401 +29,401 @@
         "url": "https://github.com/meetrice/vscode-mysql-blade.git"
     },
     "activationEvents": [
-        "onView:mysql",
-        "onCommand:mysql.addConnection",
-        "onCommand:mysql.runQuery"
+        "onView:mysqlBlade",
+        "onCommand:mysqlBlade.addConnection",
+        "onCommand:mysqlBlade.runQuery"
     ],
     "main": "./out/extension",
     "contributes": {
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "mysql-sidebar",
-                    "title": "MySQL",
+                    "id": "mysqlBlade-sidebar",
+                    "title": "MySQL Blade",
                     "icon": "logo.png"
                 }
             ]
         },
         "views": {
-            "mysql-sidebar": [
+            "mysqlBlade-sidebar": [
                 {
-                    "id": "mysqlFilter",
+                    "id": "mysqlBladeFilter",
                     "name": "Filter & Snippets",
                     "type": "webview"
                 },
                 {
-                    "id": "mysql",
-                    "name": "MySQL"
+                    "id": "mysqlBlade",
+                    "name": "MySQL Blade"
                 }
             ]
         },
         "commands": [
             {
-                "command": "mysql.refresh",
+                "command": "mysqlBlade.refresh",
                 "title": "Refresh",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.addConnection",
+                "command": "mysqlBlade.addConnection",
                 "title": "Add Connection",
                 "icon": {
                     "light": "resources/light/add.svg",
                     "dark": "resources/dark/add.svg"
                 },
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.deleteConnection",
+                "command": "mysqlBlade.deleteConnection",
                 "title": "Delete Connection",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.editDisplayName",
+                "command": "mysqlBlade.editDisplayName",
                 "title": "Edit Display Name",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.runQuery",
+                "command": "mysqlBlade.runQuery",
                 "title": "Run MySQL Query",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.newQuery",
+                "command": "mysqlBlade.newQuery",
                 "title": "New Query",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.selectDatabase",
+                "command": "mysqlBlade.selectDatabase",
                 "title": "Select Database",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.selectTop1000",
+                "command": "mysqlBlade.selectTop1000",
                 "title": "Select Top 100",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.copyTableName",
+                "command": "mysqlBlade.copyTableName",
                 "title": "Copy Name",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.showTableStructure",
+                "command": "mysqlBlade.showTableStructure",
                 "title": "View Table Structure",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.viewTableStructureFromEditor",
+                "command": "mysqlBlade.viewTableStructureFromEditor",
                 "title": "View Table Structure",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.openTable",
+                "command": "mysqlBlade.openTable",
                 "title": "Open Table",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.pinTable",
+                "command": "mysqlBlade.pinTable",
                 "title": "Pin Table",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.unpinTable",
+                "command": "mysqlBlade.unpinTable",
                 "title": "Unpin Table",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.selectColumn",
+                "command": "mysqlBlade.selectColumn",
                 "title": "Select Column",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.selectFilter",
+                "command": "mysqlBlade.selectFilter",
                 "title": "Select Filter",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.copyColumnName",
+                "command": "mysqlBlade.copyColumnName",
                 "title": "Copy Name",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.insertColumnName",
+                "command": "mysqlBlade.insertColumnName",
                 "title": "Insert to Editor",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.dropTable",
+                "command": "mysqlBlade.dropTable",
                 "title": "Drop Table",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.backupTable",
+                "command": "mysqlBlade.backupTable",
                 "title": "Backup Table",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.countTable",
+                "command": "mysqlBlade.countTable",
                 "title": "Count",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.addColumn",
+                "command": "mysqlBlade.addColumn",
                 "title": "Add Column",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.dropColumn",
+                "command": "mysqlBlade.dropColumn",
                 "title": "Drop Column",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.setTableFilter",
+                "command": "mysqlBlade.setTableFilter",
                 "title": "Filter Tables",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.clearTableFilter",
+                "command": "mysqlBlade.clearTableFilter",
                 "title": "Clear Table Filter",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.collapseAll",
+                "command": "mysqlBlade.collapseAll",
                 "title": "Collapse All",
                 "icon": {
                     "light": "resources/light/collapse.svg",
                     "dark": "resources/dark/collapse.svg"
                 },
                 "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             },
             {
-                "command": "mysql.expandAll",
+                "command": "mysqlBlade.expandAll",
                 "title": "Expand All",
                 "icon": {
                     "light": "resources/light/expand.svg",
                     "dark": "resources/dark/expand.svg"
                 },
                 "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
-                "category": "MySQL"
+                "category": "MySQL Blade"
             }
         ],
         "keybindings": [
             {
-                "command": "mysql.runQuery",
+                "command": "mysqlBlade.runQuery",
                 "key": "ctrl+alt+e",
                 "when": "editorLangId == sql"
             },
             {
-                "command": "mysql.openTable",
+                "command": "mysqlBlade.openTable",
                 "key": "cmd+shift+t",
                 "mac": "cmd+shift+t",
                 "win": "ctrl+shift+t",
                 "linux": "ctrl+shift+t"
             },
             {
-                "command": "mysql.setTableFilter",
+                "command": "mysqlBlade.setTableFilter",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f",
-                "when": "view == mysql"
+                "when": "view == mysqlBlade"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "mysql.runQuery",
+                    "command": "mysqlBlade.runQuery",
                     "group": "inline@1"
                 },
                 {
-                    "command": "mysql.viewTableStructureFromEditor",
+                    "command": "mysqlBlade.viewTableStructureFromEditor",
                     "group": "inline@2"
                 }
             ],
             "view/title": [
                 {
-                    "command": "mysql.addConnection",
-                    "when": "view == mysql",
+                    "command": "mysqlBlade.addConnection",
+                    "when": "view == mysqlBlade",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "mysql.expandAll",
-                    "when": "view == mysql && !mysqlTreeAllExpanded",
+                    "command": "mysqlBlade.expandAll",
+                    "when": "view == mysqlBlade && !mysqlBladeTreeAllExpanded",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "mysql.collapseAll",
-                    "when": "view == mysql && mysqlTreeAllExpanded",
+                    "command": "mysqlBlade.collapseAll",
+                    "when": "view == mysqlBlade && mysqlBladeTreeAllExpanded",
                     "group": "navigation@2"
                 }
             ],
             "view/item/context": [
                 {
-                    "command": "mysql.newQuery",
-                    "when": "view == mysql && viewItem == connection",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.newQuery",
+                    "when": "view == mysqlBlade && viewItem == connection",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.refresh",
-                    "when": "view == mysql && viewItem == connection",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.refresh",
+                    "when": "view == mysqlBlade && viewItem == connection",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.editDisplayName",
-                    "when": "view == mysql && viewItem == connection",
-                    "group": "mysql@2"
+                    "command": "mysqlBlade.editDisplayName",
+                    "when": "view == mysqlBlade && viewItem == connection",
+                    "group": "mysqlBlade@2"
                 },
                 {
-                    "command": "mysql.deleteConnection",
-                    "when": "view == mysql && viewItem == connection",
-                    "group": "mysql@3"
+                    "command": "mysqlBlade.deleteConnection",
+                    "when": "view == mysqlBlade && viewItem == connection",
+                    "group": "mysqlBlade@3"
                 },
                 {
-                    "command": "mysql.selectDatabase",
-                    "when": "view == mysql && viewItem == database",
-                    "group": "mysql@0"
+                    "command": "mysqlBlade.selectDatabase",
+                    "when": "view == mysqlBlade && viewItem == database",
+                    "group": "mysqlBlade@0"
                 },
                 {
-                    "command": "mysql.newQuery",
-                    "when": "view == mysql && viewItem == database",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.newQuery",
+                    "when": "view == mysqlBlade && viewItem == database",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.refresh",
-                    "when": "view == mysql && viewItem == database",
-                    "group": "mysql@2"
+                    "command": "mysqlBlade.refresh",
+                    "when": "view == mysqlBlade && viewItem == database",
+                    "group": "mysqlBlade@2"
                 },
                 {
-                    "command": "mysql.copyTableName",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.copyTableName",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.copyTableName",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.copyTableName",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.showTableStructure",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.showTableStructure",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.showTableStructure",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.showTableStructure",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.selectTop1000",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@0"
+                    "command": "mysqlBlade.selectTop1000",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@0"
                 },
                 {
-                    "command": "mysql.selectTop1000",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@0"
+                    "command": "mysqlBlade.selectTop1000",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@0"
                 },
                 {
-                    "command": "mysql.refresh",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@2"
+                    "command": "mysqlBlade.refresh",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@2"
                 },
                 {
-                    "command": "mysql.refresh",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@2"
+                    "command": "mysqlBlade.refresh",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@2"
                 },
                 {
-                    "command": "mysql.pinTable",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@3"
+                    "command": "mysqlBlade.pinTable",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@3"
                 },
                 {
-                    "command": "mysql.unpinTable",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@3"
+                    "command": "mysqlBlade.unpinTable",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@3"
                 },
                 {
-                    "command": "mysql.backupTable",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@4"
+                    "command": "mysqlBlade.backupTable",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@4"
                 },
                 {
-                    "command": "mysql.backupTable",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@4"
+                    "command": "mysqlBlade.backupTable",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@4"
                 },
                 {
-                    "command": "mysql.dropTable",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@5"
+                    "command": "mysqlBlade.dropTable",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@5"
                 },
                 {
-                    "command": "mysql.dropTable",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@5"
+                    "command": "mysqlBlade.dropTable",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@5"
                 },
                 {
-                    "command": "mysql.countTable",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@6"
+                    "command": "mysqlBlade.countTable",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@6"
                 },
                 {
-                    "command": "mysql.countTable",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@6"
+                    "command": "mysqlBlade.countTable",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@6"
                 },
                 {
-                    "command": "mysql.addColumn",
-                    "when": "view == mysql && viewItem == table",
-                    "group": "mysql@7"
+                    "command": "mysqlBlade.addColumn",
+                    "when": "view == mysqlBlade && viewItem == table",
+                    "group": "mysqlBlade@7"
                 },
                 {
-                    "command": "mysql.addColumn",
-                    "when": "view == mysql && viewItem == pinnedTable",
-                    "group": "mysql@7"
+                    "command": "mysqlBlade.addColumn",
+                    "when": "view == mysqlBlade && viewItem == pinnedTable",
+                    "group": "mysqlBlade@7"
                 },
                 {
-                    "command": "mysql.selectColumn",
-                    "when": "view == mysql && viewItem == column",
-                    "group": "mysql@0"
+                    "command": "mysqlBlade.selectColumn",
+                    "when": "view == mysqlBlade && viewItem == column",
+                    "group": "mysqlBlade@0"
                 },
                 {
-                    "command": "mysql.selectFilter",
-                    "when": "view == mysql && viewItem == column",
-                    "group": "mysql@1"
+                    "command": "mysqlBlade.selectFilter",
+                    "when": "view == mysqlBlade && viewItem == column",
+                    "group": "mysqlBlade@1"
                 },
                 {
-                    "command": "mysql.copyColumnName",
-                    "when": "view == mysql && viewItem == column",
-                    "group": "mysql@2"
+                    "command": "mysqlBlade.copyColumnName",
+                    "when": "view == mysqlBlade && viewItem == column",
+                    "group": "mysqlBlade@2"
                 },
                 {
-                    "command": "mysql.insertColumnName",
-                    "when": "view == mysql && viewItem == column",
-                    "group": "mysql@3"
+                    "command": "mysqlBlade.insertColumnName",
+                    "when": "view == mysqlBlade && viewItem == column",
+                    "group": "mysqlBlade@3"
                 },
                 {
-                    "command": "mysql.dropColumn",
-                    "when": "view == mysql && viewItem == column",
-                    "group": "mysql@4"
+                    "command": "mysqlBlade.dropColumn",
+                    "when": "view == mysqlBlade && viewItem == column",
+                    "group": "mysqlBlade@4"
                 }
             ]
         },
         "configuration": {
             "type": "object",
-            "title": "MySQL",
+            "title": "MySQL Blade",
             "properties": {
-                "vscode-mysql.enableTelemetry": {
+                "mysql-blade.enableTelemetry": {
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to enable anonymous usage collection."
                 },
-                "vscode-mysql.maxTableCount": {
+                "mysql-blade.maxTableCount": {
                     "type": "integer",
                     "default": 500,
                     "description": "The maximum table count shown in the tree view"
                 },
-                "vscode-mysql.enableDelimiterOperator": {
+                "mysql-blade.enableDelimiterOperator": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable support for DELIMITER operator."

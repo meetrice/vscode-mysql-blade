@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
     Global.secrets = context.secrets;
 
     // Set context keys to help prevent other extensions' menus from showing
-    vscode.commands.executeCommand('setContext', 'mysql.sidebarActive', true);
+    vscode.commands.executeCommand('setContext', 'mysqlBlade.sidebarActive', true);
     // Indicate this is not a file tree, which may prevent file sync extensions from showing menus
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', false);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', false);
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
     let lastClickedNode: { node: INode, timestamp: number } | undefined = undefined;
     const DOUBLE_CLICK_THRESHOLD = 500; // milliseconds
 
-    const treeView = vscode.window.createTreeView("mysql", {
+    const treeView = vscode.window.createTreeView("mysqlBlade", {
         treeDataProvider: mysqlTreeDataProvider
     });
     context.subscriptions.push(treeView);
@@ -39,24 +39,24 @@ export function activate(context: vscode.ExtensionContext) {
     // Make treeView accessible for collapse/expand functionality
     const warningMessage = "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃";
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.expandAll", async () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.expandAll", async () => {
         const confirm = await vscode.window.showWarningMessage(warningMessage, "继续", "取消");
         if (confirm !== "继续") {
             return;
         }
         TableFilterState.instance.setAllExpanded(true);
-        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', true);
+        await vscode.commands.executeCommand('setContext', 'mysqlBladeTreeAllExpanded', true);
         // Force refresh by triggering tree data change event
         mysqlTreeDataProvider.refresh();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.collapseAll", async () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.collapseAll", async () => {
         const confirm = await vscode.window.showWarningMessage(warningMessage, "继续", "取消");
         if (confirm !== "继续") {
             return;
         }
         TableFilterState.instance.setAllExpanded(false);
-        await vscode.commands.executeCommand('setContext', 'mysqlTreeAllExpanded', false);
+        await vscode.commands.executeCommand('setContext', 'mysqlBladeTreeAllExpanded', false);
         // Force refresh by triggering tree data change event
         mysqlTreeDataProvider.refresh();
     }));
@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 
                 if (isDoubleClick) {
                     // Double click: execute Select Top 100
-                    await vscode.commands.executeCommand("mysql.selectTop1000", node);
+                    await vscode.commands.executeCommand("mysqlBlade.selectTop1000", node);
                     lastClickedNode = undefined;
                 } else {
                     // Single click: just track it
@@ -93,7 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(vscode.window.registerTreeDataProvider("mysql", mysqlTreeDataProvider));
+    context.subscriptions.push(vscode.window.registerTreeDataProvider("mysqlBlade", mysqlTreeDataProvider));
 
     // Refresh tree when filter changes
     mysqlTreeDataProvider.onFilterChanged(() => {
@@ -101,73 +101,73 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     // Filter commands (also available via command palette)
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.setTableFilter", async () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.setTableFilter", async () => {
         // Filter panel is always visible in sidebar
-        vscode.commands.executeCommand('mysqlFilter.focus');
+        vscode.commands.executeCommand('mysqlBladeFilter.focus');
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.clearTableFilter", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.clearTableFilter", () => {
         TableFilterState.instance.clear();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.refresh", (node: INode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.refresh", (node: INode) => {
         AppInsightsClient.sendEvent("refresh");
         mysqlTreeDataProvider.refresh(node);
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.addConnection", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.addConnection", () => {
         mysqlTreeDataProvider.addConnection();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.deleteConnection", (connectionNode: ConnectionNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.deleteConnection", (connectionNode: ConnectionNode) => {
         connectionNode.deleteConnection(context, mysqlTreeDataProvider);
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.editDisplayName", (connectionNode: ConnectionNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.editDisplayName", (connectionNode: ConnectionNode) => {
         connectionNode.editDisplayName(context, mysqlTreeDataProvider);
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.runQuery", () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.runQuery", () => {
         Utility.runQuery();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.newQuery", (databaseOrConnectionNode: DatabaseNode | ConnectionNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.newQuery", (databaseOrConnectionNode: DatabaseNode | ConnectionNode) => {
         databaseOrConnectionNode.newQuery();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectDatabase", (databaseNode: DatabaseNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.selectDatabase", (databaseNode: DatabaseNode) => {
         databaseNode.selectDatabase();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectTop1000", (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.selectTop1000", (tableNode: TableNode) => {
         tableNode.selectTop1000();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.copyTableName", (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.copyTableName", (tableNode: TableNode) => {
         tableNode.copyTableName();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.showTableStructure", (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.showTableStructure", (tableNode: TableNode) => {
         tableNode.showTableStructure();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.pinTable", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.pinTable", async (tableNode: TableNode) => {
         await tableNode.pin();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.unpinTable", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.unpinTable", async (tableNode: TableNode) => {
         await tableNode.unpin();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.countTable", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.countTable", async (tableNode: TableNode) => {
         await tableNode.countTable();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.addColumn", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.addColumn", async (tableNode: TableNode) => {
         await tableNode.addColumn();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.viewTableStructureFromEditor", async () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.viewTableStructureFromEditor", async () => {
         if (!vscode.window.activeTextEditor) {
             vscode.window.showWarningMessage("No active editor");
             return;
