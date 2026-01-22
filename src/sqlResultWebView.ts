@@ -284,6 +284,73 @@ export class SqlResultWebView {
                     font-size: 12px;
                     white-space: nowrap;
                 }
+                .pagination-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 16px;
+                    padding: 12px;
+                    background-color: var(--vscode-editor-selectionBackground);
+                    border-radius: 4px;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                }
+                .pagination-info {
+                    color: var(--vscode-descriptionForeground);
+                    font-size: 12px;
+                }
+                .pagination-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .pagination-btn {
+                    padding: 4px 12px;
+                    font-size: 12px;
+                    background-color: var(--vscode-button-background);
+                    color: var(--vscode-button-foreground);
+                    border: none;
+                    border-radius: 2px;
+                    cursor: pointer;
+                    min-width: 32px;
+                }
+                .pagination-btn:hover:not(:disabled) {
+                    background-color: var(--vscode-button-hoverBackground);
+                }
+                .pagination-btn:disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                }
+                .pagination-btn.active {
+                    background-color: var(--vscode-button-hoverBackground);
+                    font-weight: 600;
+                }
+                .page-size-selector {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .page-size-label {
+                    color: var(--vscode-descriptionForeground);
+                    font-size: 12px;
+                }
+                .page-size-select {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    background-color: var(--vscode-input-background);
+                    color: var(--vscode-input-foreground);
+                    border: 1px solid var(--vscode-input-border);
+                    border-radius: 2px;
+                    cursor: pointer;
+                }
+                .page-size-select:focus {
+                    outline: none;
+                    border-color: var(--vscode-focusBorder);
+                }
+                .pagination-pages {
+                    display: flex;
+                    gap: 4px;
+                }
             </style>
         `;
 
