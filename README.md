@@ -2,10 +2,6 @@
 
 A powerful and efficient MySQL management tool for Visual Studio Code with advanced filtering, snippets, and table management capabilities.
 
-![Version](https://img.shields.io/visual-studio-marketplace/v/meetrice.mysql-blade)
-![Installs](https://img.shields.io/visual-studio-marketplace/i/meetrice.mysql-blade)
-![Rating](https://img.shields.io/visual-studio-marketplace/r/meetrice.mysql-blade)
-
 ## Screenshots
 
 ![screenshot](images/screenshot.png)
@@ -122,9 +118,7 @@ Use the **Filter & Snippets** panel at the top of the sidebar:
 
 ## Repository
 
-[GitHub Repository](https://github.com/meetrice/vscode-mysql-blade)
-
-This is an enhanced version of the original [vscode-mysql](https://github.com/formulahendry/vscode-mysql) by formulahendry.
+This is an enhanced MySQL management tool for Visual Studio Code.
 
 ## Contributing
 
@@ -136,11 +130,8 @@ MIT
 
 ## Marketplace
 
-[Install from VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=meetrice.mysql-blade)
+Available on Visual Studio Code Marketplace.
 
 ---
 
-## publish to Marketplace
-npx vsce publish
-
-**Enjoy using MySQL Blade!** ??
+**Enjoy using MySQL Blade!**

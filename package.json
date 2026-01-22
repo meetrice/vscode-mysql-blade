@@ -1,7 +1,7 @@
 {
     "name": "mysql-blade",
-    "displayName": "MySQL Blade",
-    "description": "MySQL Blade management tool",
+    "displayName": "MySQL Blade Pro",
+    "description": "MySQL management tool",
     "version": "0.5.5",
     "publisher": "meetrice",
     "icon": "logo.png",

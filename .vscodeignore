@@ -1,9 +1,15 @@
 .vscode/**
 .vscode-test/**
+.claude/**
 out/test/**
 out/**/*.map
 src/**
 images/**
+docs/**
 .gitignore
+.travis.yml
 tsconfig.json
+tslint.json
+build-and-install.sh
+test.sql
 vsc-extension-quickstart.md
