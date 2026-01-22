@@ -358,6 +358,23 @@ export class SqlResultWebView {
             <script>
                 const vscode = acquireVsCodeApi();
                 let allTableData = [];
+                let currentPage = 1;
+                let pageSize = 10;
+                let filteredData = [];
+
+                // Initialize table data
+                window.addEventListener('load', function() {
+                    const tableRows = document.querySelectorAll('tbody tr');
+                    allTableData = Array.from(tableRows).map(row => {
+                        const cells = row.querySelectorAll('td');
+                        const rowData = {};
+                        cells.forEach((cell, index) => {
+                            rowData['col_' + index] = cell.textContent;
+                        });
+                        return rowData;
+                    });
+                    updatePagination();
+                });
 
                 function showModal(value) {
                     document.getElementById('modalValue').textContent = value;
@@ -425,7 +442,10 @@ export class SqlResultWebView {
 
                     const rows = tbody.querySelectorAll('tr');
                     
-                    rows.forEach(row => {
+                    // Reset filtered data
+                    filteredData = [];
+                    
+                    rows.forEach((row, index) => {
                         const cells = row.querySelectorAll('td');
                         let showRow = true;
 
@@ -442,7 +462,146 @@ export class SqlResultWebView {
                         });
 
                         row.style.display = showRow ? '' : 'none';
+                        if (showRow) {
+                            filteredData.push(index);
+                        }
                     });
+
+                    // Reset to first page when filtering
+                    currentPage = 1;
+                    updatePagination();
+                }
+
+                // Pagination functions
+                function getTotalPages() {
+                    const totalRows = filteredData.length > 0 ? filteredData.length : allTableData.length;
+                    return Math.ceil(totalRows / pageSize);
+                }
+
+                function getCurrentPageData() {
+                    const totalRows = filteredData.length > 0 ? filteredData.length : allTableData.length;
+                    const startIndex = (currentPage - 1) * pageSize;
+                    const endIndex = Math.min(startIndex + pageSize, totalRows);
+                    
+                    if (filteredData.length > 0) {
+                        return filteredData.slice(startIndex, endIndex).map(index => allTableData[index]);
+                    }
+                    return allTableData.slice(startIndex, endIndex);
+                }
+
+                function updatePagination() {
+                    const totalPages = getTotalPages();
+                    const totalRows = filteredData.length > 0 ? filteredData.length : allTableData.length;
+                    const startRow = totalRows === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+                    const endRow = Math.min(currentPage * pageSize, totalRows);
+
+                    // Update pagination info
+                    const infoElement = document.getElementById('paginationInfo');
+                    if (infoElement) {
+                        infoElement.textContent = \`Showing \${startRow} to \${endRow} of \${totalRows} entries\`;
+                    }
+
+                    // Update page buttons
+                    renderPageButtons(totalPages);
+
+                    // Update table display
+                    updateTableDisplay();
+                }
+
+                function renderPageButtons(totalPages) {
+                    const pagesContainer = document.getElementById('paginationPages');
+                    if (!pagesContainer) return;
+
+                    let html = '';
+
+                    // Previous button
+                    html += \`<button class="pagination-btn" onclick="goToPage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>&lt;</button>\`;
+
+                    // Page number buttons
+                    const maxVisiblePages = 5;
+                    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                    if (endPage - startPage < maxVisiblePages - 1) {
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                    }
+
+                    if (startPage > 1) {
+                        html += \`<button class="pagination-btn" onclick="goToPage(1)">1</button>\`;
+                        if (startPage > 2) {
+                            html += \`<span style="padding: 4px 8px;">...</span>\`;
+                        }
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        html += \`<button class="pagination-btn \${i === currentPage ? 'active' : ''}" onclick="goToPage(\${i})">\${i}</button>\`;
+                    }
+
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            html += \`<span style="padding: 4px 8px;">...</span>\`;
+                        }
+                        html += \`<button class="pagination-btn" onclick="goToPage(\${totalPages})">\${totalPages}</button>\`;
+                    }
+
+                    // Next button
+                    html += \`<button class="pagination-btn" onclick="goToPage(\${currentPage + 1})" \${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}>&gt;</button>\`;
+
+                    pagesContainer.innerHTML = html;
+                }
+
+                function goToPage(page) {
+                    const totalPages = getTotalPages();
+                    if (page < 1 || page > totalPages) return;
+                    currentPage = page;
+                    updatePagination();
+                }
+
+                function changePageSize() {
+                    const select = document.getElementById('pageSizeSelect');
+                    if (select) {
+                        pageSize = parseInt(select.value);
+                        currentPage = 1;
+                        updatePagination();
+                    }
+                }
+
+                function updateTableDisplay() {
+                    const table = document.querySelector('table');
+                    if (!table) return;
+
+                    const tbody = table.querySelector('tbody');
+                    if (!tbody) return;
+
+                    const allRows = tbody.querySelectorAll('tr');
+                    const pageData = getCurrentPageData();
+
+                    // Hide all rows first
+                    allRows.forEach(row => {
+                        row.style.display = 'none';
+                    });
+
+                    // Show only rows for current page
+                    if (filteredData.length > 0) {
+                        // When filtering, show rows based on filtered indices
+                        const startIndex = (currentPage - 1) * pageSize;
+                        const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+                        for (let i = startIndex; i < endIndex; i++) {
+                            const rowIndex = filteredData[i];
+                            if (allRows[rowIndex]) {
+                                allRows[rowIndex].style.display = '';
+                            }
+                        }
+                    } else {
+                        // When not filtering, show rows based on page
+                        const startIndex = (currentPage - 1) * pageSize;
+                        const endIndex = Math.min(startIndex + pageSize, allTableData.length);
+                        for (let i = startIndex; i < endIndex; i++) {
+                            if (allRows[i]) {
+                                allRows[i].style.display = '';
+                            }
+                        }
+                    }
                 }
 
                 // Initialize filter event listeners
@@ -453,8 +612,10 @@ export class SqlResultWebView {
                     });
                 }
 
-                // Initialize filters after DOM is ready
-                setTimeout(initFilters, 0);
+                // Initialize pagination after DOM is ready
+                setTimeout(function() {
+                    initFilters();
+                }, 0);
             <\/script>
         `;
 
@@ -578,7 +739,33 @@ export class SqlResultWebView {
             body += "</tr>";
         });
 
-        return body + "</tbody></table>";
+        body += "</tbody></table>";
+
+        // Add pagination controls
+        body += `
+            <div class="pagination-container">
+                <div class="pagination-info" id="paginationInfo">Showing 0 to 0 of 0 entries</div>
+                <div class="pagination-controls">
+                    <div class="page-size-selector">
+                        <span class="page-size-label">Rows per page:</span>
+                        <select id="pageSizeSelect" class="page-size-select" onchange="changePageSize()">
+                            <option value="5" ${rows.length > 0 && rows.length <= 5 ? 'selected' : ''}>5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20" ${rows.length >= 20 ? 'selected' : ''}>20</option>
+                            <option value="50" ${rows.length >= 50 ? 'selected' : ''}>50</option>
+                            <option value="100" ${rows.length >= 100 ? 'selected' : ''}>100</option>
+                        </select>
+                    </div>
+                    <div class="pagination-pages" id="paginationPages">
+                        <button class="pagination-btn" disabled>&lt;</button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn" disabled>&gt;</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return body;
     }
 
     private static escapeHtml(text: string): string {
