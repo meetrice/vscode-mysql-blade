@@ -32,8 +32,12 @@ export class SqlResultWebView {
         SqlResultWebView.currentDatabase = database;
         SqlResultWebView.currentTable = table;
 
-        // First, create/open SQL text document
-        await Utility.createSQLTextDocument(sql || "");
+        // Only create new SQL document if there's no active SQL editor
+        if (!vscode.window.activeTextEditor ||
+            vscode.window.activeTextEditor.document.languageId !== 'sql') {
+            await Utility.createSQLTextDocument(sql || "");
+        }
+        
         // Split editor into two rows (上下分栏)
         await vscode.commands.executeCommand('workbench.action.editorLayoutTwoRows');
 
