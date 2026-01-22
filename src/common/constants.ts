@@ -1,6 +1,6 @@
 "user strict";
 
 export class Constants {
-    public static ExtensionId = "formulahendry.vscode-mysql";
-    public static GlobalStateMySQLConectionsKey = "mysql.connections";
+    public static ExtensionId = "meetrice.mysql-blade";
+    public static GlobalStateMySQLConectionsKey = "mysqlBlade.connections";
 }

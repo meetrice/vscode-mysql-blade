@@ -238,7 +238,7 @@ export function activate(context: vscode.ExtensionContext) {
         await tempTableNode.showTableStructure();
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.openTable", async () => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.openTable", async () => {
         if (!Global.activeConnection || !Global.activeConnection.database) {
             vscode.window.showWarningMessage("No MySQL database selected. Please select a database first.");
             return;
@@ -339,19 +339,19 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 
     // Column node commands
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectColumn", async (columnNode: ColumnNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.selectColumn", async (columnNode: ColumnNode) => {
         if (columnNode) {
             await columnNode.selectColumn();
         }
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectFilter", async (columnNode: ColumnNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.selectFilter", async (columnNode: ColumnNode) => {
         if (columnNode) {
             await columnNode.selectFilter();
         }
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.copyColumnName", (columnNode: ColumnNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.copyColumnName", (columnNode: ColumnNode) => {
         if (columnNode) {
             const columnName = columnNode.getColumnName();
             vscode.env.clipboard.writeText(columnName);
@@ -359,7 +359,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.insertColumnName", async (columnNode: ColumnNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.insertColumnName", async (columnNode: ColumnNode) => {
         if (columnNode) {
             const columnName = columnNode.getColumnName();
             if (!vscode.window.activeTextEditor) {
@@ -374,14 +374,14 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.dropColumn", async (columnNode: ColumnNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.dropColumn", async (columnNode: ColumnNode) => {
         if (columnNode) {
             await columnNode.dropColumn();
         }
     }));
 
     // Table node commands - Drop Table
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.dropTable", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.dropTable", async (tableNode: TableNode) => {
         if (!tableNode) {
             return;
         }
@@ -423,7 +423,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // Table node commands - Backup Table
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.backupTable", async (tableNode: TableNode) => {
+    context.subscriptions.push(vscode.commands.registerCommand("mysqlBlade.backupTable", async (tableNode: TableNode) => {
         if (!tableNode) {
             return;
         }
@@ -471,7 +471,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     // Clear context keys when extension deactivates
-    vscode.commands.executeCommand('setContext', 'mysql.sidebarActive', undefined);
+    vscode.commands.executeCommand('setContext', 'mysqlBlade.sidebarActive', undefined);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsFolder', undefined);
     vscode.commands.executeCommand('setContext', 'explorerResourceIsRoot', undefined);
 }

@@ -13,7 +13,7 @@ export class Utility {
     public static readonly maxTableCount = Utility.getConfiguration().get<number>("maxTableCount");
 
     public static getConfiguration(): vscode.WorkspaceConfiguration {
-        return vscode.workspace.getConfiguration("vscode-mysql");
+        return vscode.workspace.getConfiguration("mysql-blade");
     }
 
     public static queryPromise<T>(connection, sql: string): Promise<T> {

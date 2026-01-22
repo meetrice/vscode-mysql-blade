@@ -9,7 +9,7 @@ export class FilterInputPanel {
         // Register the webview view provider
         const provider = new FilterViewProvider();
         context.subscriptions.push(
-            vscode.window.registerWebviewViewProvider('mysqlFilter', provider)
+            vscode.window.registerWebviewViewProvider('mysqlBladeFilter', provider)
         );
     }
 }

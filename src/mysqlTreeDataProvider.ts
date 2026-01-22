@@ -8,7 +8,7 @@ import { IConnection } from "./model/connection";
 import { ConnectionNode } from "./model/connectionNode";
 import { INode } from "./model/INode";
 
-const PINNED_TABLES_KEY = "mysql.pinnedTables";
+const PINNED_TABLES_KEY = "mysqlBlade.pinnedTables";
 
 // Global filter state for table filtering
 export class TableFilterState {
