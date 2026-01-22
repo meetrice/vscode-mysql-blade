@@ -102,8 +102,37 @@ export class SqlResultWebView {
                     padding: 8px 12px;
                     text-align: left;
                     font-weight: 600;
+                    cursor: pointer;
+                    user-select: none;
+                }
+                thead tr:first-child th {
                     position: sticky;
                     top: 0;
+                    z-index: 10;
+                }
+                thead tr:first-child th:hover {
+                    background-color: #d0d0d0;
+                }
+                th.filter-header {
+                    position: sticky;
+                    top: 41px;
+                    background-color: #f5f5f5;
+                    padding: 4px 8px;
+                    z-index: 9;
+                }
+                th.filter-header input {
+                    width: 100%;
+                    padding: 4px 6px;
+                    font-size: 12px;
+                    border: 1px solid #ccc;
+                    border-radius: 2px;
+                    box-sizing: border-box;
+                    background-color: var(--vscode-input-background);
+                    color: var(--vscode-input-foreground);
+                }
+                th.filter-header input:focus {
+                    outline: none;
+                    border-color: var(--vscode-focusBorder);
                 }
                 td {
                     border: 1px solid #e0e0e0;
@@ -261,6 +290,7 @@ export class SqlResultWebView {
         const script = `
             <script>
                 const vscode = acquireVsCodeApi();
+                let allTableData = [];
 
                 function showModal(value) {
                     document.getElementById('modalValue').textContent = value;
@@ -296,6 +326,69 @@ export class SqlResultWebView {
                         e.preventDefault();
                         runQuery();
                     }
+                });
+
+                // Copy header text to clipboard
+                function copyHeader(headerText) {
+                    navigator.clipboard.writeText(headerText).then(() => {
+                        // Show a brief visual feedback
+                        const originalBg = event.target.style.backgroundColor;
+                        event.target.style.backgroundColor = '#a8d5a8';
+                        setTimeout(() => {
+                            event.target.style.backgroundColor = originalBg;
+                        }, 200);
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                }
+
+                // Filter table based on filter inputs
+                function filterTable() {
+                    const table = document.querySelector('table');
+                    if (!table) return;
+
+                    const filterInputs = document.querySelectorAll('.filter-input');
+                    const filters = Array.from(filterInputs).map(input => ({
+                        columnIndex: parseInt(input.dataset.columnIndex),
+                        value: input.value.toLowerCase()
+                    }));
+
+                    const tbody = table.querySelector('tbody');
+                    if (!tbody) return;
+
+                    const rows = tbody.querySelectorAll('tr');
+                    
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        let showRow = true;
+
+                        filters.forEach(filter => {
+                            if (filter.value && showRow) {
+                                const cell = cells[filter.columnIndex];
+                                if (cell) {
+                                    const cellText = cell.textContent.toLowerCase();
+                                    if (!cellText.includes(filter.value)) {
+                                        showRow = false;
+                                    }
+                                }
+                            }
+                        });
+
+                        row.style.display = showRow ? '' : 'none';
+                    });
+                }
+
+                // Initialize filter event listeners
+                function initFilters() {
+                    const filterInputs = document.querySelectorAll('.filter-input');
+                    filterInputs.forEach(input => {
+                        input.addEventListener('input', filterTable);
+                    });
+                }
+
+                // Initialize on page load
+                document.addEventListener('DOMContentLoaded', function() {
+                    initFilters();
                 });
             <\/script>
         `;
@@ -340,12 +433,26 @@ export class SqlResultWebView {
             return '<div class="no-data">No data</div>';
         }
 
-        let head = "";
+        // Get all field names
+        const fields = [];
         for (const field in rows[0]) {
             if (rows[0].hasOwnProperty(field)) {
-                head += "<th>" + this.escapeHtml(field) + "</th>";
+                fields.push(field);
             }
         }
+
+        // Generate header row with click-to-copy functionality
+        let head = "";
+        fields.forEach((field, index) => {
+            const escapedField = this.escapeHtml(field);
+            head += `<th onclick="copyHeader('${escapedField}')" title="Click to copy: ${escapedField}">${escapedField}</th>`;
+        });
+
+        // Generate filter row
+        let filterRow = "";
+        fields.forEach((field, index) => {
+            filterRow += `<th class="filter-header"><input type="text" class="filter-input" data-column-index="${index}" placeholder="Filter..."></th>`;
+        });
 
         // Display SQL input bar and row count at the top
         const sqlValue = sql ? this.escapeHtml(sql.trim()) : "";
@@ -358,7 +465,7 @@ export class SqlResultWebView {
             <button class="run-btn" onclick="runQuery()">Run</button>
             ${totalInfo}
         </div>`;
-        let body = headerInfo + "<table><tr>" + head + "</tr>";
+        let body = headerInfo + "<table><thead><tr>" + head + "</tr><tr>" + filterRow + "</tr></thead><tbody>";
 
         rows.forEach((row) => {
             body += "<tr>";
@@ -406,7 +513,7 @@ export class SqlResultWebView {
             body += "</tr>";
         });
 
-        return body + "</table>";
+        return body + "</tbody></table>";
     }
 
     private static escapeHtml(text: string): string {
