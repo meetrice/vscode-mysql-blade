@@ -249,8 +249,14 @@ export class Utility {
     }
 
     public static async createSQLTextDocument(sql: string = "") {
-        const textDocument = await vscode.workspace.openTextDocument({ content: sql, language: "sql" });
-        return vscode.window.showTextDocument(textDocument);
+        // Add an empty line at the beginning for better editing experience
+        const content = sql ? "\n" + sql : "\n";
+        const textDocument = await vscode.workspace.openTextDocument({ content: content, language: "sql" });
+        const editor = await vscode.window.showTextDocument(textDocument);
+        // Move cursor to the first line (empty line)
+        const position = new vscode.Position(0, 0);
+        editor.selection = new vscode.Selection(position, position);
+        return editor;
     }
 
     public static createConnection(connectionOptions: IConnection): any {
