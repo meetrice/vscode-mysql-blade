@@ -140,4 +140,7 @@ MIT
 
 ---
 
+## publish to Marketplace
+npx vsce publish
+
 **Enjoy using MySQL Blade!** ??
