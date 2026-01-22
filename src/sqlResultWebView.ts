@@ -329,13 +329,13 @@ export class SqlResultWebView {
                 });
 
                 // Copy header text to clipboard
-                function copyHeader(headerText) {
+                function copyHeader(headerText, element) {
                     navigator.clipboard.writeText(headerText).then(() => {
                         // Show a brief visual feedback
-                        const originalBg = event.target.style.backgroundColor;
-                        event.target.style.backgroundColor = '#a8d5a8';
+                        const originalBg = element.style.backgroundColor;
+                        element.style.backgroundColor = '#a8d5a8';
                         setTimeout(() => {
-                            event.target.style.backgroundColor = originalBg;
+                            element.style.backgroundColor = originalBg;
                         }, 200);
                     }).catch(err => {
                         console.error('Failed to copy: ', err);
@@ -445,7 +445,7 @@ export class SqlResultWebView {
         let head = "";
         fields.forEach((field, index) => {
             const escapedField = this.escapeHtml(field);
-            head += `<th onclick="copyHeader('${escapedField}')" title="Click to copy: ${escapedField}">${escapedField}</th>`;
+            head += `<th onclick="copyHeader('${escapedField}', this)" title="Click to copy: ${escapedField}">${escapedField}</th>`;
         });
 
         // Generate filter row
