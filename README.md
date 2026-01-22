@@ -1,6 +1,6 @@
-# MySQL Blade
+# Mysql Instant Query
 
-A powerful and efficient MySQL management tool for Visual Studio Code with advanced filtering, snippets, and table management capabilities.
+A powerful and efficient MySQL instant query tool for Visual Studio Code with advanced filtering, snippets, and table management capabilities.
 
 ## Screenshots
 
@@ -65,7 +65,7 @@ Quick-access buttons for common SQL keywords and patterns:
 
 ### Add MySQL Connection
 
-1. Click the **MySQL Blade** icon in the Activity Bar
+1. Click the **Mysql Instant Query** icon in the Activity Bar
 2. Click the **+** button in the sidebar
 3. Enter connection details:
    - Host
@@ -134,4 +134,4 @@ Available on Visual Studio Code Marketplace.
 
 ---
 
-**Enjoy using MySQL Blade!**
+**Enjoy using Mysql Instant Query!**

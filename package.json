@@ -1,7 +1,7 @@
 {
-    "name": "mysql-blade",
-    "displayName": "MySQL Blade",
-    "description": "MySQL management tool",
+    "name": "mysql-instant-query",
+    "displayName": "Mysql Instant Query",
+    "description": "MySQL instant query tool",
     "version": "0.5.5",
     "publisher": "meetrice",
     "icon": "logo.png",
@@ -20,410 +20,410 @@
         "RDBMS"
     ],
     "bugs": {
-        "url": "https://github.com/meetrice/vscode-mysql-blade/issues",
+        "url": "https://github.com/meetrice/vscode-mysql-instant-query/issues",
         "email": "meetrice@gmail.com"
     },
-    "homepage": "https://github.com/meetrice/vscode-mysql-blade/blob/master/README.md",
+    "homepage": "https://github.com/meetrice/vscode-mysql-instant-query/blob/master/README.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/meetrice/vscode-mysql-blade.git"
+        "url": "https://github.com/meetrice/vscode-mysql-instant-query.git"
     },
     "activationEvents": [
-        "onView:mysqlBlade",
-        "onCommand:mysqlBlade.addConnection",
-        "onCommand:mysqlBlade.runQuery"
+        "onView:mysqlInstantQuery",
+        "onCommand:mysqlInstantQuery.addConnection",
+        "onCommand:mysqlInstantQuery.runQuery"
     ],
     "main": "./out/extension",
     "contributes": {
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "mysqlBlade-sidebar",
-                    "title": "MySQL Blade",
+                    "id": "mysqlInstantQuery-sidebar",
+                    "title": "Mysql Instant Query",
                     "icon": "logo.png"
                 }
             ]
         },
         "views": {
-            "mysqlBlade-sidebar": [
+            "mysqlInstantQuery-sidebar": [
                 {
-                    "id": "mysqlBladeFilter",
+                    "id": "mysqlInstantQueryFilter",
                     "name": "Filter & Snippets",
                     "type": "webview"
                 },
                 {
-                    "id": "mysqlBlade",
-                    "name": "MySQL Blade"
+                    "id": "mysqlInstantQuery",
+                    "name": "Mysql Instant Query"
                 }
             ]
         },
         "commands": [
             {
-                "command": "mysqlBlade.refresh",
+                "command": "mysqlInstantQuery.refresh",
                 "title": "Refresh",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.addConnection",
+                "command": "mysqlInstantQuery.addConnection",
                 "title": "Add Connection",
                 "icon": {
                     "light": "resources/light/add.svg",
                     "dark": "resources/dark/add.svg"
                 },
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.deleteConnection",
+                "command": "mysqlInstantQuery.deleteConnection",
                 "title": "Delete Connection",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.editDisplayName",
+                "command": "mysqlInstantQuery.editDisplayName",
                 "title": "Edit Display Name",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.runQuery",
+                "command": "mysqlInstantQuery.runQuery",
                 "title": "Run MySQL Query",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.newQuery",
+                "command": "mysqlInstantQuery.newQuery",
                 "title": "New Query",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.selectDatabase",
+                "command": "mysqlInstantQuery.selectDatabase",
                 "title": "Select Database",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.selectTop1000",
+                "command": "mysqlInstantQuery.selectTop1000",
                 "title": "Select Top 100",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.copyTableName",
+                "command": "mysqlInstantQuery.copyTableName",
                 "title": "Copy Name",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.showTableStructure",
+                "command": "mysqlInstantQuery.showTableStructure",
                 "title": "View Table Structure",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.viewTableStructureFromEditor",
+                "command": "mysqlInstantQuery.viewTableStructureFromEditor",
                 "title": "View Table Structure",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.openTable",
+                "command": "mysqlInstantQuery.openTable",
                 "title": "Open Table",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.pinTable",
+                "command": "mysqlInstantQuery.pinTable",
                 "title": "Pin Table",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.unpinTable",
+                "command": "mysqlInstantQuery.unpinTable",
                 "title": "Unpin Table",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.selectColumn",
+                "command": "mysqlInstantQuery.selectColumn",
                 "title": "Select Column",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.selectFilter",
+                "command": "mysqlInstantQuery.selectFilter",
                 "title": "Select Filter",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.copyColumnName",
+                "command": "mysqlInstantQuery.copyColumnName",
                 "title": "Copy Name",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.insertColumnName",
+                "command": "mysqlInstantQuery.insertColumnName",
                 "title": "Insert to Editor",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.dropTable",
+                "command": "mysqlInstantQuery.dropTable",
                 "title": "Drop Table",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.backupTable",
+                "command": "mysqlInstantQuery.backupTable",
                 "title": "Backup Table",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.countTable",
+                "command": "mysqlInstantQuery.countTable",
                 "title": "Count",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.addColumn",
+                "command": "mysqlInstantQuery.addColumn",
                 "title": "Add Column",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.dropColumn",
+                "command": "mysqlInstantQuery.dropColumn",
                 "title": "Drop Column",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.setTableFilter",
+                "command": "mysqlInstantQuery.setTableFilter",
                 "title": "Filter Tables",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.clearTableFilter",
+                "command": "mysqlInstantQuery.clearTableFilter",
                 "title": "Clear Table Filter",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.collapseAll",
+                "command": "mysqlInstantQuery.collapseAll",
                 "title": "Collapse All",
                 "icon": {
                     "light": "resources/light/collapse.svg",
                     "dark": "resources/dark/collapse.svg"
                 },
                 "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             },
             {
-                "command": "mysqlBlade.expandAll",
+                "command": "mysqlInstantQuery.expandAll",
                 "title": "Expand All",
                 "icon": {
                     "light": "resources/light/expand.svg",
                     "dark": "resources/dark/expand.svg"
                 },
                 "tooltip": "在未过滤表格,结果太多时,慎用折叠展开,有可能导致崩溃",
-                "category": "MySQL Blade"
+                "category": "Mysql Instant Query"
             }
         ],
         "keybindings": [
             {
-                "command": "mysqlBlade.runQuery",
+                "command": "mysqlInstantQuery.runQuery",
                 "key": "ctrl+alt+e",
                 "when": "editorLangId == sql"
             },
             {
-                "command": "mysqlBlade.openTable",
+                "command": "mysqlInstantQuery.openTable",
                 "key": "cmd+shift+t",
                 "mac": "cmd+shift+t",
                 "win": "ctrl+shift+t",
                 "linux": "ctrl+shift+t"
             },
             {
-                "command": "mysqlBlade.setTableFilter",
+                "command": "mysqlInstantQuery.setTableFilter",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f",
-                "when": "view == mysqlBlade"
+                "when": "view == mysqlInstantQuery"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "mysqlBlade.runQuery",
+                    "command": "mysqlInstantQuery.runQuery",
                     "group": "inline@1"
                 },
                 {
-                    "command": "mysqlBlade.viewTableStructureFromEditor",
+                    "command": "mysqlInstantQuery.viewTableStructureFromEditor",
                     "group": "inline@2"
                 }
             ],
             "view/title": [
                 {
-                    "command": "mysqlBlade.addConnection",
-                    "when": "view == mysqlBlade",
+                    "command": "mysqlInstantQuery.addConnection",
+                    "when": "view == mysqlInstantQuery",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "mysqlBlade.expandAll",
-                    "when": "view == mysqlBlade && !mysqlBladeTreeAllExpanded",
+                    "command": "mysqlInstantQuery.expandAll",
+                    "when": "view == mysqlInstantQuery && !mysqlInstantQueryTreeAllExpanded",
                     "group": "navigation@2"
                 },
                 {
-                    "command": "mysqlBlade.collapseAll",
-                    "when": "view == mysqlBlade && mysqlBladeTreeAllExpanded",
+                    "command": "mysqlInstantQuery.collapseAll",
+                    "when": "view == mysqlInstantQuery && mysqlInstantQueryTreeAllExpanded",
                     "group": "navigation@2"
                 }
             ],
             "view/item/context": [
                 {
-                    "command": "mysqlBlade.newQuery",
-                    "when": "view == mysqlBlade && viewItem == connection",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.newQuery",
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.refresh",
-                    "when": "view == mysqlBlade && viewItem == connection",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.refresh",
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.editDisplayName",
-                    "when": "view == mysqlBlade && viewItem == connection",
-                    "group": "mysqlBlade@2"
+                    "command": "mysqlInstantQuery.editDisplayName",
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
-                    "command": "mysqlBlade.deleteConnection",
-                    "when": "view == mysqlBlade && viewItem == connection",
-                    "group": "mysqlBlade@3"
+                    "command": "mysqlInstantQuery.deleteConnection",
+                    "when": "view == mysqlInstantQuery && viewItem == connection",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
-                    "command": "mysqlBlade.selectDatabase",
-                    "when": "view == mysqlBlade && viewItem == database",
-                    "group": "mysqlBlade@0"
+                    "command": "mysqlInstantQuery.selectDatabase",
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
-                    "command": "mysqlBlade.newQuery",
-                    "when": "view == mysqlBlade && viewItem == database",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.newQuery",
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.refresh",
-                    "when": "view == mysqlBlade && viewItem == database",
-                    "group": "mysqlBlade@2"
+                    "command": "mysqlInstantQuery.refresh",
+                    "when": "view == mysqlInstantQuery && viewItem == database",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
-                    "command": "mysqlBlade.copyTableName",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.copyTableName",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.copyTableName",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.copyTableName",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.showTableStructure",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.showTableStructure",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.showTableStructure",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.showTableStructure",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.selectTop1000",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@0"
+                    "command": "mysqlInstantQuery.selectTop1000",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
-                    "command": "mysqlBlade.selectTop1000",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@0"
+                    "command": "mysqlInstantQuery.selectTop1000",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
-                    "command": "mysqlBlade.refresh",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@2"
+                    "command": "mysqlInstantQuery.refresh",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
-                    "command": "mysqlBlade.refresh",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@2"
+                    "command": "mysqlInstantQuery.refresh",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
-                    "command": "mysqlBlade.pinTable",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@3"
+                    "command": "mysqlInstantQuery.pinTable",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
-                    "command": "mysqlBlade.unpinTable",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@3"
+                    "command": "mysqlInstantQuery.unpinTable",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
-                    "command": "mysqlBlade.backupTable",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@4"
+                    "command": "mysqlInstantQuery.backupTable",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@4"
                 },
                 {
-                    "command": "mysqlBlade.backupTable",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@4"
+                    "command": "mysqlInstantQuery.backupTable",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@4"
                 },
                 {
-                    "command": "mysqlBlade.dropTable",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@5"
+                    "command": "mysqlInstantQuery.dropTable",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@5"
                 },
                 {
-                    "command": "mysqlBlade.dropTable",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@5"
+                    "command": "mysqlInstantQuery.dropTable",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@5"
                 },
                 {
-                    "command": "mysqlBlade.countTable",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@6"
+                    "command": "mysqlInstantQuery.countTable",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@6"
                 },
                 {
-                    "command": "mysqlBlade.countTable",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@6"
+                    "command": "mysqlInstantQuery.countTable",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@6"
                 },
                 {
-                    "command": "mysqlBlade.addColumn",
-                    "when": "view == mysqlBlade && viewItem == table",
-                    "group": "mysqlBlade@7"
+                    "command": "mysqlInstantQuery.addColumn",
+                    "when": "view == mysqlInstantQuery && viewItem == table",
+                    "group": "mysqlInstantQuery@7"
                 },
                 {
-                    "command": "mysqlBlade.addColumn",
-                    "when": "view == mysqlBlade && viewItem == pinnedTable",
-                    "group": "mysqlBlade@7"
+                    "command": "mysqlInstantQuery.addColumn",
+                    "when": "view == mysqlInstantQuery && viewItem == pinnedTable",
+                    "group": "mysqlInstantQuery@7"
                 },
                 {
-                    "command": "mysqlBlade.selectColumn",
-                    "when": "view == mysqlBlade && viewItem == column",
-                    "group": "mysqlBlade@0"
+                    "command": "mysqlInstantQuery.selectColumn",
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@0"
                 },
                 {
-                    "command": "mysqlBlade.selectFilter",
-                    "when": "view == mysqlBlade && viewItem == column",
-                    "group": "mysqlBlade@1"
+                    "command": "mysqlInstantQuery.selectFilter",
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@1"
                 },
                 {
-                    "command": "mysqlBlade.copyColumnName",
-                    "when": "view == mysqlBlade && viewItem == column",
-                    "group": "mysqlBlade@2"
+                    "command": "mysqlInstantQuery.copyColumnName",
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@2"
                 },
                 {
-                    "command": "mysqlBlade.insertColumnName",
-                    "when": "view == mysqlBlade && viewItem == column",
-                    "group": "mysqlBlade@3"
+                    "command": "mysqlInstantQuery.insertColumnName",
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@3"
                 },
                 {
-                    "command": "mysqlBlade.dropColumn",
-                    "when": "view == mysqlBlade && viewItem == column",
-                    "group": "mysqlBlade@4"
+                    "command": "mysqlInstantQuery.dropColumn",
+                    "when": "view == mysqlInstantQuery && viewItem == column",
+                    "group": "mysqlInstantQuery@4"
                 }
             ]
         },
         "configuration": {
             "type": "object",
-            "title": "MySQL Blade",
+            "title": "Mysql Instant Query",
             "properties": {
-                "mysql-blade.enableTelemetry": {
+                "mysql-instant-query.enableTelemetry": {
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to enable anonymous usage collection."
                 },
-                "mysql-blade.maxTableCount": {
+                "mysql-instant-query.maxTableCount": {
                     "type": "integer",
                     "default": 500,
                     "description": "The maximum table count shown in the tree view"
                 },
-                "mysql-blade.enableDelimiterOperator": {
+                "mysql-instant-query.enableDelimiterOperator": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable support for DELIMITER operator."

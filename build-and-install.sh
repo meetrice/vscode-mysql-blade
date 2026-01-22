@@ -1,6 +1,6 @@
 #!/bin/bash
 # 编译、打包、安装 VSCode 插件脚本
-#npm run compile && npx vsce package && code --install-extension mysql-blade-0.5.5.vsix --force
+#npm run compile && npx vsce package && code --install-extension mysql-instant-query-0.5.5.vsix --force
 set -e  # 遇到错误时退出
 
 echo "========================================="
@@ -30,7 +30,7 @@ echo "========================================="
 echo "3. 安装扩展..."
 echo "========================================="
 # 查找生成的 vsix 文件
-VSIX_FILE=$(ls -t vscode-mysql-*.vsix 2>/dev/null | head -1)
+VSIX_FILE=$(ls -t mysql-instant-query-*.vsix 2>/dev/null | head -1)
 
 if [ -z "$VSIX_FILE" ]; then
     echo "错误: 未找到 VSIX 文件"

@@ -1,6 +1,6 @@
 "user strict";
 
 export class Constants {
-    public static ExtensionId = "meetrice.mysql-blade";
-    public static GlobalStateMySQLConectionsKey = "mysqlBlade.connections";
+    public static ExtensionId = "meetrice.mysql-instant-query";
+    public static GlobalStateMySQLConectionsKey = "mysqlInstantQuery.connections";
 }

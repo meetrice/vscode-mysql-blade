@@ -111,12 +111,12 @@ npm run compile
 npx vsce package
 ```
 
-这会生成 `mysql-blade-0.5.5.vsix` 文件（版本号根据 package.json 确定）。
+这会生成 `mysql-instant-query-0.5.5.vsix` 文件（版本号根据 package.json 确定）。
 
 #### 4. 安装扩展
 
 ```bash
-code --install-extension mysql-blade-0.5.5.vsix --force
+code --install-extension mysql-instant-query-0.5.5.vsix --force
 ```
 
 使用 `--force` 参数可以强制覆盖已安装的旧版本。
@@ -136,7 +136,7 @@ code --install-extension mysql-blade-0.5.5.vsix --force
 如果已经修改了版本号，可以使用以下一行命令完成编译、打包和安装：
 
 ```bash
-npm run compile && npx vsce package && code --install-extension mysql-blade-0.5.5.vsix --force
+npm run compile && npx vsce package && code --install-extension mysql-instant-query-0.5.5.vsix --force
 ```
 
 ## 验证修复
