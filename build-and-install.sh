@@ -4,6 +4,17 @@
 set -e  # 遇到错误时退出
 
 echo "========================================="
+echo "0. 卸载旧版本插件..."
+echo "========================================="
+# 卸载可能存在的旧版本
+code --list-extensions | grep -i mysql | while read ext; do
+    echo "正在卸载: $ext"
+    code --uninstall-extension "$ext" 2>/dev/null || true
+done
+echo "旧版本插件卸载完成"
+
+echo ""
+echo "========================================="
 echo "1. 编译 TypeScript..."
 echo "========================================="
 npm run compile
