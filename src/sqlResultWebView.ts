@@ -386,10 +386,8 @@ export class SqlResultWebView {
                     });
                 }
 
-                // Initialize on page load
-                document.addEventListener('DOMContentLoaded', function() {
-                    initFilters();
-                });
+                // Initialize filters after DOM is ready
+                setTimeout(initFilters, 0);
             <\/script>
         `;
 
@@ -462,7 +460,7 @@ export class SqlResultWebView {
             : "";
         const headerInfo = `<div class="query-bar">
             <input type="text" id="sqlInput" class="query-input" value="${sqlValue}" placeholder="Enter SQL query...">
-            <button class="run-btn" onclick="runQuery()">Run</button>
+            <button class="run-btn" onclick="runQuery()">运行</button>
             ${totalInfo}
         </div>`;
         let body = headerInfo + "<table><thead><tr>" + head + "</tr><tr>" + filterRow + "</tr></thead><tbody>";

@@ -1,12 +1,12 @@
 #!/bin/bash
 # 编译、打包、安装 VSCode 插件脚本
-
+#npm run compile && npx vsce package && code --install-extension mysql-blade-0.5.5.vsix --force
 set -e  # 遇到错误时退出
 
 echo "========================================="
 echo "0. 卸载旧版本插件..."
 echo "========================================="
-# 卸载可能存在的旧版本
+# 卸载可能存在的旧版本 code --uninstall-extension meetrice.vscode-mysql
 code --list-extensions | grep -i mysql | while read ext; do
     echo "正在卸载: $ext"
     code --uninstall-extension "$ext" 2>/dev/null || true
