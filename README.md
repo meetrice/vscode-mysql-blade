@@ -4,17 +4,18 @@ A powerful and efficient MySQL instant query tool for Visual Studio Code with ad
 
 ## Screenshots
 
+*main*
 ![screenshot](images/screenshot.png)
-*screenshot*
 
-![count](images/count.png)
 *count*
+![count](images/count.png)
 
-![select column](images/select%20column.png)
 *select column*
+![select column](images/select%20column.png)
 
-![select filter](images/select%20filter.png)
 *select filter*
+![select filter](images/select%20filter.png)
+
 
 ![view table structure](images/view%20table%20structure.png)
 
